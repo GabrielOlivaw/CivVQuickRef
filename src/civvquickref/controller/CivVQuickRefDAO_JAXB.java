@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package civvquickref;
+package civvquickref.controller;
 
+import civvquickref.CivilizationList;
+import civvquickref.CivilizationVGame;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.List;
@@ -77,7 +79,8 @@ public class CivVQuickRefDAO_JAXB implements CivVQuickRefDAO {
     @Override
     public String getSource() {
         
-        String[] splitFile = xmlFile.split("\\\\");
+        //String[] splitFile = xmlFile.split("\\\\");
+        String[] splitFile = xmlFile.split("/");
         
         return splitFile[splitFile.length - 1];
     }

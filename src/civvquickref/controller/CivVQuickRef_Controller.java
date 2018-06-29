@@ -3,10 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package civvquickref;
+package civvquickref.controller;
 
+import civvquickref.CivilizationList;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Random;
 import java.util.ResourceBundle;
@@ -31,7 +33,7 @@ import javax.xml.bind.JAXBException;
  */
 public class CivVQuickRef_Controller implements Initializable {
     
-    private static final String FILE = "CivVQuickRef.xml";
+    private static String FILE = "CivVQuickRef.xml";
     
     @FXML
     private ComboBox civilizationList;
@@ -81,15 +83,20 @@ public class CivVQuickRef_Controller implements Initializable {
         } catch (FileNotFoundException ex) {
             alert.setContentText(ex.getMessage());
             alert.showAndWait();
+        } catch (URISyntaxException ex) {
+            alert.setContentText(ex.getMessage());
+            alert.showAndWait();
         } catch (Exception ex) {
             alert.setContentText(ex.getMessage());
             alert.showAndWait();
         }
     }
     
-    private void loadData() throws JAXBException, FileNotFoundException, Exception {
+    private void loadData() throws JAXBException, FileNotFoundException, 
+            URISyntaxException, Exception {
         
-        CivVQuickRefDAO civDAO = new CivVQuickRefDAO_JAXB(FILE);
+        CivVQuickRefDAO civDAO = new CivVQuickRefDAO_JAXB(getClass().
+                getClassLoader().getResource(FILE).toURI().getPath());
         
         ObservableList<CivilizationList.Civ> civList = FXCollections.observableList(civDAO.loadCivs());
         
@@ -136,9 +143,10 @@ public class CivVQuickRef_Controller implements Initializable {
     /**
      * Handler of the random button pressed event. It selects a random civilization 
      * from the ComboBox.
+     * @throws java.net.URISyntaxException
      */
     @FXML
-    public void randomPressed() {
+    public void randomPressed() throws URISyntaxException {
         int numCivs = civilizationList.getItems().size();
         
         civilizationList.getSelectionModel().select(rnd.nextInt(numCivs));
@@ -147,14 +155,17 @@ public class CivVQuickRef_Controller implements Initializable {
     
     /**
      * Handler for the ComboBox item changing event.
+     * @throws java.net.URISyntaxException
      */
     @FXML
-    public void civilizationChanged() {
+    public void civilizationChanged() throws URISyntaxException {
         CivilizationList.Civ selectedCiv = 
                 (CivilizationList.Civ)civilizationList.getSelectionModel().getSelectedItem();
-        
+        /*
         File file = new File("img/" + selectedCiv.getCivimg() + ".png");
         Image image = new Image(file.toURI().toString());
+*/
+        Image image = new Image(getClass().getClassLoader().getResource(selectedCiv.getCivimg() + ".png").toURI().toString());
         civilizationImage.setImage(image);
         
         civilizationName.setText(selectedCiv.getCivname());

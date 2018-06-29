@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package civvquickref;
+package civvquickref.controller;
 
+import civvquickref.CivilizationList;
 import java.util.List;
 
 /**
