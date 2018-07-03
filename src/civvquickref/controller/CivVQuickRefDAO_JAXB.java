@@ -79,8 +79,7 @@ public class CivVQuickRefDAO_JAXB implements CivVQuickRefDAO {
     @Override
     public String getSource() {
         
-        //String[] splitFile = xmlFile.split("\\\\");
-        String[] splitFile = xmlFile.split("/");
+        String[] splitFile = xmlFile.split("\\\\");
         
         return splitFile[splitFile.length - 1];
     }
