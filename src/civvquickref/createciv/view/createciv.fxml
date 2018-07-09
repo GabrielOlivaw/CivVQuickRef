@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="civvquickref.createciv.controller.CreateCiv_Controller">
+   <children>
+      <GridPane vgap="5.0" VBox.vgrow="ALWAYS">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="297.0" minWidth="10.0" prefWidth="143.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="540.0" minWidth="10.0" prefWidth="421.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="540.0" minWidth="10.0" prefWidth="169.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label text="Civilization name" />
+            <Label text="Leader name" GridPane.rowIndex="1" />
+            <Label text="Civilization skill" GridPane.rowIndex="2" />
+            <Button fx:id="addImageButton" mnemonicParsing="false" onAction="#addImageButtonPressed" prefHeight="100.0" prefWidth="74.0" text="Add image" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+            <TextField fx:id="civName" GridPane.columnIndex="1">
+               <GridPane.margin>
+                  <Insets left="20.0" right="20.0" />
+               </GridPane.margin>
+            </TextField>
+            <TextField fx:id="civLeader" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets left="20.0" right="20.0" />
+               </GridPane.margin>
+            </TextField>
+            <TextArea fx:id="civSkill" prefHeight="200.0" prefWidth="200.0" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets left="20.0" right="20.0" />
+               </GridPane.margin></TextArea>
+         </children>
+         <padding>
+            <Insets left="10.0" />
+         </padding>
+      </GridPane>
+      <GridPane hgap="20.0" VBox.vgrow="ALWAYS">
+        <columnConstraints>
+          <ColumnConstraints minWidth="10.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+            <ColumnConstraints minWidth="10.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="78.0" minHeight="0.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="78.0" minHeight="0.0" prefHeight="33.0" />
+        </rowConstraints>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+         <children>
+            <Label text="Unit name" />
+            <TextField fx:id="unitName1" GridPane.columnIndex="1" />
+            <ComboBox fx:id="unitType1" prefWidth="150.0" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+            <Label text="Unit replaces" GridPane.rowIndex="2" />
+            <TextField fx:id="unitReplaces1" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label text="Unit name" GridPane.columnIndex="2" />
+            <Label text="Unit replaces" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <TextField fx:id="unitName2" GridPane.columnIndex="3" />
+            <TextField fx:id="unitReplaces2" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+            <ComboBox fx:id="unitType2" prefWidth="150.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+            <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="3" GridPane.rowIndex="3">
+               <children>
+                  <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                  <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#cancelButtonPressed" prefHeight="25.0" prefWidth="171.0" text="Cancel" />
+                  <Button fx:id="acceptButton" mnemonicParsing="false" onAction="#acceptButtonPressed" prefHeight="25.0" prefWidth="167.0" text="Accept" />
+               </children>
+            </HBox>
+         </children>
+      </GridPane>
+   </children>
+</VBox>

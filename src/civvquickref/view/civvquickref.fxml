@@ -24,7 +24,7 @@
                 </Menu>
                 <Menu mnemonicParsing="false" text="Edit">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Add Civilization" />
+                        <MenuItem mnemonicParsing="false" text="Create civilization" onAction="#createCivMenuSelected" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Help">
@@ -53,7 +53,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
-                <ComboBox fx:id="civilizationList" onAction="#civilizationChanged" prefHeight="25.0" prefWidth="181.0" promptText="Haudenosaunee" GridPane.halignment="CENTER" />
+                <ComboBox fx:id="civilizationList" onAction="#civilizationChanged" prefHeight="25.0" prefWidth="181.0" promptText="Civilization name" GridPane.halignment="CENTER" />
                 <Button onAction="#randomPressed" mnemonicParsing="false" prefHeight="5.0" prefWidth="0.0" GridPane.columnIndex="1" GridPane.halignment="CENTER">
                     <graphic>
                         <ImageView fitHeight="40.0" fitWidth="39.0">
@@ -63,7 +63,7 @@
                         </ImageView>
                     </graphic>
                 </Button>
-                <Label fx:id="modName" text="Core - Brave New World" GridPane.columnIndex="2">
+                <Label fx:id="modName" text="Core - Mod name" GridPane.columnIndex="2">
                     <font>
                         <Font size="26.0" />
                     </font>
@@ -72,12 +72,12 @@
                     <graphic>
                         <ImageView fx:id="civilizationImage" fitHeight="60.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@Iroquois_(Civ5).png" />
+                                <Image url="@civimg.png" />
                             </image>
                         </ImageView>
                     </graphic>
                 </Label>
-                <Label fx:id="civilizationName" text="Haudenosaunee" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1">
+                <Label fx:id="civilizationName" text="Civilization name" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1">
                     <font>
                         <Font size="40.0" />
                     </font>
@@ -87,7 +87,7 @@
                         <Label fx:id="fileName" text="civilizations_core.xml" />
                     </children>
                 </VBox>
-                <Label fx:id="leaderName" text="Hiawatha" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2">
+                <Label fx:id="leaderName" text="Leader name" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2">
                     <font>
                         <Font size="30.0" />
                     </font>
@@ -97,32 +97,32 @@
                         <Font size="14.0" />
                     </font>
                 </Label>
-                <Label fx:id="unitName1" text="Mohawk Warrior" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                <Label fx:id="unitName1" text="Unit name" GridPane.columnIndex="1" GridPane.rowIndex="5">
                     <font>
                         <Font size="14.0" />
                     </font>
                 </Label>
-                <Label fx:id="unitType1" text="Unit" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                <Label fx:id="unitType1" text="Unit type" GridPane.columnIndex="1" GridPane.rowIndex="6">
                     <font>
                         <Font size="14.0" />
                     </font>
                 </Label>
-                <Label fx:id="unitReplaces1" text="Swordsman" GridPane.columnIndex="1" GridPane.rowIndex="7">
+                <Label fx:id="unitReplaces1" text="Unit replaces" GridPane.columnIndex="1" GridPane.rowIndex="7">
                     <font>
                         <Font size="14.0" />
                     </font>
                 </Label>
-                <Label fx:id="unitName2" text="Longhouse" GridPane.columnIndex="2" GridPane.rowIndex="5">
+                <Label fx:id="unitName2" text="Unit name" GridPane.columnIndex="2" GridPane.rowIndex="5">
                     <font>
                         <Font size="14.0" />
                     </font>
                 </Label>
-                <Label fx:id="unitType2" text="Building" GridPane.columnIndex="2" GridPane.rowIndex="6">
+                <Label fx:id="unitType2" text="Unit type" GridPane.columnIndex="2" GridPane.rowIndex="6">
                     <font>
                         <Font size="14.0" />
                     </font>
                 </Label>
-                <Label fx:id="unitReplaces2" text="Workshop" GridPane.columnIndex="2" GridPane.rowIndex="7">
+                <Label fx:id="unitReplaces2" text="Unit replaces" GridPane.columnIndex="2" GridPane.rowIndex="7">
                     <font>
                         <Font size="14.0" />
                     </font>

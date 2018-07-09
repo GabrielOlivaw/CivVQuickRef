@@ -17,6 +17,7 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -24,7 +25,10 @@ import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
@@ -32,6 +36,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
+import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import javax.imageio.ImageIO;
 import javax.xml.bind.JAXBException;
@@ -49,6 +54,8 @@ public class CivVQuickRef_Controller implements Initializable {
 
     @FXML
     private ComboBox civilizationList;
+    
+    private ObservableList<CivilizationList.Civ> civilizationListSource;
 
     @FXML
     private Label modName;
@@ -213,9 +220,9 @@ public class CivVQuickRef_Controller implements Initializable {
             URISyntaxException, Exception {
         
         CivVQuickRefDAO civDAO = new CivVQuickRefDAO_JAXB(DATA_FOLDER + FILE);
-        ObservableList<CivilizationList.Civ> civList = FXCollections.observableList(civDAO.loadCivs());
+        civilizationListSource = FXCollections.observableList(civDAO.loadCivs());
 
-        civilizationList.setItems(civList);
+        civilizationList.setItems(civilizationListSource);
         civilizationList.setConverter(new StringConverter<CivilizationList.Civ>() {
             @Override
             public String toString(CivilizationList.Civ object) {
@@ -225,7 +232,7 @@ public class CivVQuickRef_Controller implements Initializable {
             @Override
             public CivilizationList.Civ fromString(String string) {
                 //throw new UnsupportedOperationException("Not supported yet.");
-                return findCiv(civList, string);
+                return findCiv(civilizationListSource, string);
             }
 
         });
@@ -304,6 +311,25 @@ public class CivVQuickRef_Controller implements Initializable {
         unitName2.setText(selectedCiv.getCivunits().getUnit().get(1).getUnitname());
         unitType2.setText(selectedCiv.getCivunits().getUnit().get(1).getUnittype());
         unitReplaces2.setText(selectedCiv.getCivunits().getUnit().get(1).getUnitreplaces());
+    }
+    
+    @FXML
+    public void createCivMenuSelected() {
+        Parent root;
+        
+        try {
+            root = FXMLLoader.load(getClass().getResource("../createciv/view/createciv.fxml"));
+            
+            Scene createCivScene = new Scene(root);
+            
+            Stage createCivStage = new Stage();
+            createCivStage.setTitle("Create civilization");
+            createCivStage.setScene(createCivScene);
+            
+            createCivStage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(CivVQuickRef_Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

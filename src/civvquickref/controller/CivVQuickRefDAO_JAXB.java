@@ -23,10 +23,31 @@ public class CivVQuickRefDAO_JAXB implements CivVQuickRefDAO {
     
     private static final String PACKAGE = "civvquickref";
     
+    private static JAXBContext jaxbContext;
     private String xmlFile;
     
+    /**
+     * Performance tip: use an unique JAXBContext instead of creating one for 
+     * each operation.
+     * 
+     * https://stackoverflow.com/questions/7400422/jaxb-creating-context-and-marshallers-cost
+     * https://stackoverflow.com/questions/6043956/how-do-i-improve-performance-of-application-that-uses-the-jaxbcontext-newinstanc
+     */
+    static {
+        try {
+            jaxbContext = JAXBContext.newInstance(PACKAGE);
+        } catch (JAXBException ex) {
+            throw new IllegalStateException(ex);
+        }
+    }
+    
+    /**
+     * Performance tip: use an unique JAXBContext instead of creating one for 
+     * each operation.
+     * 
+     * https://stackoverflow.com/questions/7400422/jaxb-creating-context-and-marshallers-cost
+     */
     public CivVQuickRefDAO_JAXB() {
-        
     }
     
     public CivVQuickRefDAO_JAXB(String xmlFile) {
@@ -44,7 +65,6 @@ public class CivVQuickRefDAO_JAXB implements CivVQuickRefDAO {
     @Override
     public String loadModName() throws JAXBException, FileNotFoundException {
         // First, we fiddle with the JAXB part of the already mapped schema
-        JAXBContext jaxbContext = JAXBContext.newInstance(PACKAGE);
         Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
         JAXBElement jaxbElement = (JAXBElement)unmarshaller.unmarshal(new FileInputStream(xmlFile));
         
@@ -74,6 +94,10 @@ public class CivVQuickRefDAO_JAXB implements CivVQuickRefDAO {
         CivilizationVGame civVGame = (CivilizationVGame)jaxbElement.getValue();
         
         return civVGame.getCivlist().getCiv();
+    }
+    
+    public void saveCivs() {
+        
     }
     
     @Override
