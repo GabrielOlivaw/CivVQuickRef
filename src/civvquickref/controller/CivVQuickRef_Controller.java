@@ -6,6 +6,7 @@
 package civvquickref.controller;
 
 import civvquickref.CivilizationList;
+import civvquickref.createciv.controller.CreateCiv_Controller;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -22,8 +23,11 @@ import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -37,6 +41,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.StringConverter;
 import javax.imageio.ImageIO;
 import javax.xml.bind.JAXBException;
@@ -91,7 +96,7 @@ public class CivVQuickRef_Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
         Alert alert = new Alert(AlertType.ERROR, "", ButtonType.OK);
-
+        
         rnd = new Random();
 
         try {
@@ -237,7 +242,7 @@ public class CivVQuickRef_Controller implements Initializable {
 
         });
 
-        civilizationList.getSelectionModel().select(0);
+        civilizationList.getSelectionModel().selectFirst();
         civilizationChanged();
 
         modName.setText(civDAO.loadModName());
@@ -313,23 +318,47 @@ public class CivVQuickRef_Controller implements Initializable {
         unitReplaces2.setText(selectedCiv.getCivunits().getUnit().get(1).getUnitreplaces());
     }
     
+    /**
+     * This method opens a new Create Civilization window and obtains the created 
+     * civilization when the accept button is pressed in said window.
+     * 
+     * @param event 
+     */
     @FXML
-    public void createCivMenuSelected() {
+    public void createCivMenuSelected(ActionEvent event) {
         Parent root;
         
         try {
-            root = FXMLLoader.load(getClass().getResource("../createciv/view/createciv.fxml"));
-            
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().
+                    getResource("civvquickref/createciv/view/createciv.fxml"));
+            root = loader.load();
+            //root = FXMLLoader.load(getClass().getClassLoader().getResource("civvquickref/createciv/view/createciv.fxml"));
+                        
             Scene createCivScene = new Scene(root);
             
             Stage createCivStage = new Stage();
             createCivStage.setTitle("Create civilization");
             createCivStage.setScene(createCivScene);
+            createCivStage.setOnHiding((WindowEvent event1) -> {
+                Platform.runLater(() -> {
+                    CreateCiv_Controller createController = loader.getController();
+                    if (createController.isCivilizationCreated()) {
+                        civilizationListSource.add(createController.getCivilization());
+                    }
+                    //civilizationImage.setImage(new Image(createController.getImageURI().toString()));
+                    
+                    // TODO Copy chosen image from created civ into img folder.
+                });
+            });
             
             createCivStage.show();
         } catch (IOException ex) {
             Logger.getLogger(CivVQuickRef_Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    private void loadNewCiv() {
+        
     }
 
 }

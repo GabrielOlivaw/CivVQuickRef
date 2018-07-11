@@ -10,6 +10,7 @@ import civvquickref.CivilizationVGame;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.List;
+import static java.util.stream.Collectors.toList;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
@@ -41,12 +42,6 @@ public class CivVQuickRefDAO_JAXB implements CivVQuickRefDAO {
         }
     }
     
-    /**
-     * Performance tip: use an unique JAXBContext instead of creating one for 
-     * each operation.
-     * 
-     * https://stackoverflow.com/questions/7400422/jaxb-creating-context-and-marshallers-cost
-     */
     public CivVQuickRefDAO_JAXB() {
     }
     
@@ -86,7 +81,6 @@ public class CivVQuickRefDAO_JAXB implements CivVQuickRefDAO {
     public List<CivilizationList.Civ> loadCivs() throws JAXBException, FileNotFoundException {
         
         // First, we fiddle with the JAXB part of the already mapped schema
-        JAXBContext jaxbContext = JAXBContext.newInstance(PACKAGE);
         Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
         JAXBElement jaxbElement = (JAXBElement)unmarshaller.unmarshal(new FileInputStream(xmlFile));
         
@@ -96,8 +90,35 @@ public class CivVQuickRefDAO_JAXB implements CivVQuickRefDAO {
         return civVGame.getCivlist().getCiv();
     }
     
-    public void saveCivs() {
+    /**
+     * This method receives the entire data of a CivilizationVGame: the list of 
+     * civilizations and the name of the mod. It puts those objects into their 
+     * corresponding JAXB objects and saves the resulting CivilizationVGame object 
+     * into the XML.
+     * 
+     * Structure:
+     * 
+     * CivilizationVGame
+     * |-- String mod
+     * |-- CivilizationList civilizationList
+     *     |
+     *     |-- List<CivilizationList.Civ> civList
+     * 
+     * @param civList The list of civilizations.
+     * @param modName The name of the Civilization V mod.
+     */
+    @Override
+    public void saveCivs(List<CivilizationList.Civ> civList, String modName) {
+        CivilizationVGame civVGame = new CivilizationVGame();
         
+        CivilizationList civilizationList = new CivilizationList();
+        List<CivilizationList.Civ> civ = civilizationList.getCiv();
+        civ = civList.stream().collect(toList());
+        
+        civVGame.setCivlist(civilizationList);
+        civVGame.setMod(modName);
+        
+        // Marshall the CivilizationVGame
     }
     
     @Override
