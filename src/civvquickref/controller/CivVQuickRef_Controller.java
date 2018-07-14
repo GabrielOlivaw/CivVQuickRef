@@ -19,6 +19,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -57,13 +59,17 @@ public class CivVQuickRef_Controller implements Initializable {
     private static final String IMG_FOLDER = "./data/img/";
     private static final String FILE = "CivVQuickRef.xml";
 
+    private CivVQuickRefDAO civDAO;
+
     @FXML
     private ComboBox civilizationList;
-    
+
     private ObservableList<CivilizationList.Civ> civilizationListSource;
 
     @FXML
     private Label modName;
+
+    private String mod;
 
     @FXML
     private Label fileName;
@@ -96,7 +102,7 @@ public class CivVQuickRef_Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
         Alert alert = new Alert(AlertType.ERROR, "", ButtonType.OK);
-        
+
         rnd = new Random();
 
         try {
@@ -119,28 +125,30 @@ public class CivVQuickRef_Controller implements Initializable {
 
     /**
      * Creates the file system with the initial data.
-     * 
-     * Note: Windows manages relative file routes correctly. 
-     * However, Linux (tested with Ubuntu 17.10) saves the data folder in /home/ 
-     * directory if the .jar was double clicked. If the execution happened in 
-     * command line at the appropriate folder there is no such problem.
-     * 
+     *
+     * Note: Windows manages relative file routes correctly. However, Linux
+     * (tested with Ubuntu 17.10) saves the data folder in /home/ directory if
+     * the .jar was double clicked. If the execution happened in command line at
+     * the appropriate folder there is no such problem.
+     *
      * @throws URISyntaxException
      * @throws FileNotFoundException
-     * @throws IOException 
+     * @throws IOException
      */
     private void initializeFiles() throws URISyntaxException, FileNotFoundException, IOException {
-        
+
         // Check if the data folder exists.
         File dataFolder = new File(DATA_FOLDER);
-        if (!dataFolder.exists())
+        if (!dataFolder.exists()) {
             dataFolder.mkdir();
-        
+        }
+
         // Check if the XML exists.
         File xmlFile = new File(DATA_FOLDER + FILE);
-        if (!xmlFile.exists())
+        if (!xmlFile.exists()) {
             initializeXml();
-        
+        }
+
         // Check if the img folder exists.
         File imgFolder = new File(IMG_FOLDER);
         if (!imgFolder.exists()) {
@@ -150,8 +158,8 @@ public class CivVQuickRef_Controller implements Initializable {
     }
 
     /**
-     * Gets the XML resource with the initial data and copies it as a file inside 
-     * the data folder already created.
+     * Gets the XML resource with the initial data and copies it as a file
+     * inside the data folder already created.
      */
     private void initializeXml() {
         BufferedReader xmlReader = null;
@@ -161,7 +169,7 @@ public class CivVQuickRef_Controller implements Initializable {
                     getClassLoader().getResourceAsStream("data/" + FILE), "UTF-8"));
             xmlWriter = new BufferedWriter(new FileWriter(DATA_FOLDER + FILE));
             String line;
-            while((line = xmlReader.readLine()) != null) {
+            while ((line = xmlReader.readLine()) != null) {
                 xmlWriter.write(line);
                 xmlWriter.newLine();
             }
@@ -171,43 +179,45 @@ public class CivVQuickRef_Controller implements Initializable {
             Logger.getLogger(CivVQuickRef_Controller.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
-                if (xmlReader != null)
+                if (xmlReader != null) {
                     xmlReader.close();
-                if (xmlWriter != null)
+                }
+                if (xmlWriter != null) {
                     xmlWriter.close();
+                }
             } catch (IOException ex) {
                 Logger.getLogger(CivVQuickRef_Controller.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
-    
+
     /**
-     * Gets all the image resources used by the initial XML and copies them as 
-     * files inside the img folder.
-     * To know how many images it has to load, a txt file is used as a lookup 
-     * of all the existing image resources.
+     * Gets all the image resources used by the initial XML and copies them as
+     * files inside the img folder. To know how many images it has to load, a
+     * txt file is used as a lookup of all the existing image resources.
      */
     private void initializeImg() {
         File dataFolder = new File(IMG_FOLDER);
-        
+
         dataFolder.mkdir();
-        
+
         BufferedReader imgLookupReader = null;
         try {
             imgLookupReader = new BufferedReader(new InputStreamReader(
                     getClass().getClassLoader().getResourceAsStream("data/imglookup.txt")));
-            
+
             String imgFile;
             BufferedImage img;
-            while ((imgFile = imgLookupReader.readLine()) != null) {                
+            while ((imgFile = imgLookupReader.readLine()) != null) {
                 img = ImageIO.read(getClass().getClassLoader().getResource("data/img/" + imgFile));
                 ImageIO.write(img, "png", new File(IMG_FOLDER + imgFile));
             }
         } catch (IOException ex) {
         } finally {
             try {
-                if (imgLookupReader != null)
+                if (imgLookupReader != null) {
                     imgLookupReader.close();
+                }
             } catch (IOException ex) {
             }
         }
@@ -215,16 +225,17 @@ public class CivVQuickRef_Controller implements Initializable {
 
     /**
      * Loads all the data contained in the XML file.
-     * 
+     *
      * @throws JAXBException
      * @throws FileNotFoundException
      * @throws URISyntaxException
-     * @throws Exception 
+     * @throws Exception
      */
     private void loadData() throws JAXBException, FileNotFoundException,
             URISyntaxException, Exception {
-        
-        CivVQuickRefDAO civDAO = new CivVQuickRefDAO_JAXB(DATA_FOLDER + FILE);
+
+        civDAO = new CivVQuickRefDAO_JAXB(DATA_FOLDER + FILE);
+
         civilizationListSource = FXCollections.observableList(civDAO.loadCivs());
 
         civilizationList.setItems(civilizationListSource);
@@ -245,15 +256,16 @@ public class CivVQuickRef_Controller implements Initializable {
         civilizationList.getSelectionModel().selectFirst();
         civilizationChanged();
 
-        modName.setText(civDAO.loadModName());
+        mod = civDAO.loadModName();
+        modName.setText(mod);
 
         fileName.setText(civDAO.getSource());
     }
 
     /**
-     * Finds a Civ (civilzation) object inside the civilization list used by 
-     * the ComboBox.
-     * 
+     * Finds a Civ (civilzation) object inside the civilization list used by the
+     * ComboBox.
+     *
      * @param civList List of civilizations.
      * @param civName Name of the civilization to find.
      * @return The wanted civilization object.
@@ -292,50 +304,60 @@ public class CivVQuickRef_Controller implements Initializable {
     }
 
     /**
-     * Handler for the ComboBox item changing event.
+     * Handler for the ComboBox item changing event. 
+     * 
+     * Possible problem: When using the sort method with the ObservableList 
+     * which contains all the elements of the ComboBox, the onAction event 
+     * handled by this method is fired, leading to an InvocationTargetException. 
+     * This is solved by doing a null check on the selected item of the ComboBox. 
+     * 
+     * https://stackoverflow.com/questions/40561850/javafx-combobox-setitems-triggers-onaction-event
      *
      * @throws java.net.URISyntaxException
      */
     @FXML
     public void civilizationChanged() throws URISyntaxException {
+        
         CivilizationList.Civ selectedCiv
                 = (CivilizationList.Civ) civilizationList.getSelectionModel().getSelectedItem();
         
-        File file = new File(IMG_FOLDER + selectedCiv.getCivimg());
-        Image image = new Image(file.toURI().toString());
-        civilizationImage.setImage(image);
+        if (selectedCiv != null) {
+            File file = new File(IMG_FOLDER + selectedCiv.getCivimg());
+            Image image = new Image(file.toURI().toString());
+            civilizationImage.setImage(image);
 
-        civilizationName.setText(selectedCiv.getCivname());
-        leaderName.setText(selectedCiv.getCivleader());
-        civilizationSkill.setText(selectedCiv.getCivskill());
+            civilizationName.setText(selectedCiv.getCivname());
+            leaderName.setText(selectedCiv.getCivleader());
+            civilizationSkill.setText(selectedCiv.getCivskill());
 
-        unitName1.setText(selectedCiv.getCivunits().getUnit().get(0).getUnitname());
-        unitType1.setText(selectedCiv.getCivunits().getUnit().get(0).getUnittype());
-        unitReplaces1.setText(selectedCiv.getCivunits().getUnit().get(0).getUnitreplaces());
+            unitName1.setText(selectedCiv.getCivunits().getUnit().get(0).getUnitname());
+            unitType1.setText(selectedCiv.getCivunits().getUnit().get(0).getUnittype());
+            unitReplaces1.setText(selectedCiv.getCivunits().getUnit().get(0).getUnitreplaces());
 
-        unitName2.setText(selectedCiv.getCivunits().getUnit().get(1).getUnitname());
-        unitType2.setText(selectedCiv.getCivunits().getUnit().get(1).getUnittype());
-        unitReplaces2.setText(selectedCiv.getCivunits().getUnit().get(1).getUnitreplaces());
+            unitName2.setText(selectedCiv.getCivunits().getUnit().get(1).getUnitname());
+            unitType2.setText(selectedCiv.getCivunits().getUnit().get(1).getUnittype());
+            unitReplaces2.setText(selectedCiv.getCivunits().getUnit().get(1).getUnitreplaces());
+        }
     }
-    
+
     /**
-     * This method opens a new Create Civilization window and obtains the created 
-     * civilization when the accept button is pressed in said window.
-     * 
-     * @param event 
+     * This method opens a new Create Civilization window and obtains the
+     * created civilization when the accept button is pressed in said window.
+     *
+     * @param event
      */
     @FXML
     public void createCivMenuSelected(ActionEvent event) {
         Parent root;
-        
+
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().
                     getResource("civvquickref/createciv/view/createciv.fxml"));
             root = loader.load();
             //root = FXMLLoader.load(getClass().getClassLoader().getResource("civvquickref/createciv/view/createciv.fxml"));
-                        
+
             Scene createCivScene = new Scene(root);
-            
+
             Stage createCivStage = new Stage();
             createCivStage.setTitle("Create civilization");
             createCivStage.setScene(createCivScene);
@@ -343,22 +365,40 @@ public class CivVQuickRef_Controller implements Initializable {
                 Platform.runLater(() -> {
                     CreateCiv_Controller createController = loader.getController();
                     if (createController.isCivilizationCreated()) {
-                        civilizationListSource.add(createController.getCivilization());
+                        try {
+                            civilizationListSource.add(createController.getCivilization());
+                            FXCollections.sort(civilizationListSource,
+                                    new CivNameComparator());
+                            civDAO.saveCivs(civilizationListSource, mod);
+                        } catch (Exception ex) {
+                            Logger.getLogger(CivVQuickRef_Controller.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
                     //civilizationImage.setImage(new Image(createController.getImageURI().toString()));
-                    
+
                     // TODO Copy chosen image from created civ into img folder.
                 });
             });
-            
+
             createCivStage.show();
         } catch (IOException ex) {
             Logger.getLogger(CivVQuickRef_Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    private void loadNewCiv() {
-        
+
+    /**
+     * This class implements the comparison of two Civ objects by their 
+     * civilization names.
+     */
+    private class CivNameComparator implements Comparator<CivilizationList.Civ> {
+
+        @Override
+        public int compare(CivilizationList.Civ o1, CivilizationList.Civ o2) {
+            String civ1 = o1.getCivname().toLowerCase();
+            String civ2 = o2.getCivname().toLowerCase();
+            return civ1.compareTo(civ2);
+        }
+
     }
 
 }

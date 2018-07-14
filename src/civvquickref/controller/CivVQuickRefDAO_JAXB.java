@@ -7,13 +7,16 @@ package civvquickref.controller;
 
 import civvquickref.CivilizationList;
 import civvquickref.CivilizationVGame;
+import civvquickref.ObjectFactory;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 import static java.util.stream.Collectors.toList;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 /**
@@ -106,19 +109,33 @@ public class CivVQuickRefDAO_JAXB implements CivVQuickRefDAO {
      * 
      * @param civList The list of civilizations.
      * @param modName The name of the Civilization V mod.
+     * @throws javax.xml.bind.JAXBException
+     * @throws java.io.FileNotFoundException
      */
     @Override
-    public void saveCivs(List<CivilizationList.Civ> civList, String modName) {
-        CivilizationVGame civVGame = new CivilizationVGame();
+    public void saveCivs(List<CivilizationList.Civ> civList, String modName) 
+            throws JAXBException, FileNotFoundException {
         
-        CivilizationList civilizationList = new CivilizationList();
+        ObjectFactory factory = new ObjectFactory();
+        
+        CivilizationVGame civVGame = factory.createCivilizationVGame();
+        
+        CivilizationList civilizationList = factory.createCivilizationList();
         List<CivilizationList.Civ> civ = civilizationList.getCiv();
-        civ = civList.stream().collect(toList());
+        civ.addAll(civList);
+        
+        System.out.println(civ.get(civ.size()-1).getCivname());
         
         civVGame.setCivlist(civilizationList);
         civVGame.setMod(modName);
         
+        
+        
         // Marshall the CivilizationVGame
+        
+        Marshaller m = jaxbContext.createMarshaller();
+        m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        m.marshal(factory.createCivilizationv(civVGame), System.out);
     }
     
     @Override

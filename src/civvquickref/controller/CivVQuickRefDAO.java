@@ -16,7 +16,8 @@ public interface CivVQuickRefDAO {
     
     public String loadModName() throws Exception;
     public List<CivilizationList.Civ> loadCivs() throws Exception;
-    public void saveCivs(List<CivilizationList.Civ> civList, String modName);
+    public void saveCivs(List<CivilizationList.Civ> civList, String modName) 
+            throws Exception;
     
     public String getSource();
 }
