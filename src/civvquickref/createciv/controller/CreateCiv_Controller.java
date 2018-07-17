@@ -32,6 +32,8 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import org.apache.commons.io.FilenameUtils;
 
 /**
+ * This is the controller of the Create Civilization window, which is the same 
+ * window used when editing a selected civilization on the main screen.
  *
  * @author gabag
  */
@@ -82,6 +84,7 @@ public class CreateCiv_Controller implements Initializable {
         
         initializeFileChooser();
         initializeComboBox();
+            
     }
 
     private void initializeFileChooser() {
@@ -99,6 +102,31 @@ public class CreateCiv_Controller implements Initializable {
         unitType2.setItems(unitTypeSource);
         unitType1.getSelectionModel().selectFirst();
         unitType2.getSelectionModel().selectFirst();
+    }
+    
+    /**
+     * Initializes the data fields, in case we clicked into the edit selected 
+     * civilization menu option.
+     */
+    public void initializeCivFields() {
+        civName.setText(civilization.getCivname());
+        civLeader.setText(civilization.getCivleader());
+        civSkill.setText(civilization.getCivskill());
+        
+        File file = new File(IMG_FOLDER + civilization.getCivimg());
+        imageURI = file.toURI();
+        Image image = new Image(file.toURI().toString());
+        civilizationImage.setImage(image);
+        
+        CivilizationList.Civ.Civunits.Unit unit1 = civilization.getCivunits().getUnit().get(0);
+        unitName1.setText(unit1.getUnitname());
+        unitType1.getSelectionModel().select(unit1.getUnittype());
+        unitReplaces1.setText(unit1.getUnitreplaces());
+        
+        CivilizationList.Civ.Civunits.Unit unit2 = civilization.getCivunits().getUnit().get(1);
+        unitName2.setText(unit2.getUnitname());
+        unitType2.getSelectionModel().select(unit2.getUnittype());
+        unitReplaces2.setText(unit2.getUnitreplaces());
     }
 
     @FXML
@@ -120,7 +148,11 @@ public class CreateCiv_Controller implements Initializable {
 
     @FXML
     public void acceptButtonPressed(ActionEvent event) {
-        civilization = new CivilizationList.Civ();
+        if (civilization == null) {
+            civilization = new CivilizationList.Civ();
+            civilizationCreated = true;
+        }
+        
         civilization.setCivname(civName.getText());
         civilization.setCivleader(civLeader.getText());
         civilization.setCivskill(civSkill.getText());
@@ -154,8 +186,6 @@ public class CreateCiv_Controller implements Initializable {
         civunits.getUnit().add(unit2);
         civilization.setCivunits(civunits);
         
-        civilizationCreated = true;
-        
         ((Button) event.getSource()).getScene().getWindow().hide();
     }
     
@@ -177,6 +207,10 @@ public class CreateCiv_Controller implements Initializable {
     
     public CivilizationList.Civ getCivilization() {
         return this.civilization;
+    }
+    
+    public void setCivilization(CivilizationList.Civ civilization) {
+        this.civilization = civilization;
     }
     
     public URI getImageURI() {

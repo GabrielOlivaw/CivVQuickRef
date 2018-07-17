@@ -95,30 +95,36 @@ public class CivVQuickRef_Controller implements Initializable {
     @FXML
     private Label unitReplaces2;
 
+    private Alert errorAlert;
+    private Alert infoAlert;
+    private Alert confirmAlert;
+
     private Random rnd;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        Alert alert = new Alert(AlertType.ERROR, "", ButtonType.OK);
-
+        errorAlert = new Alert(AlertType.ERROR, "", ButtonType.OK);
+        infoAlert = new Alert(AlertType.INFORMATION, "", ButtonType.OK);
+        confirmAlert = new Alert(AlertType.CONFIRMATION, "", ButtonType.OK, ButtonType.CANCEL);
+        
         rnd = new Random();
 
         try {
             initializeFiles();
             loadData();
         } catch (URISyntaxException ex) {
-            alert.setContentText(ex.getMessage());
-            alert.showAndWait();
+            errorAlert.setContentText(ex.getMessage());
+            errorAlert.showAndWait();
         } catch (FileNotFoundException ex) {
-            alert.setContentText(ex.getMessage());
-            alert.showAndWait();
+            errorAlert.setContentText(ex.getMessage());
+            errorAlert.showAndWait();
         } catch (IOException ex) {
-            alert.setContentText(ex.getMessage());
-            alert.showAndWait();
+            errorAlert.setContentText(ex.getMessage());
+            errorAlert.showAndWait();
         } catch (Exception ex) {
-            alert.setContentText(ex.getMessage());
-            alert.showAndWait();
+            errorAlert.setContentText(ex.getMessage());
+            errorAlert.showAndWait();
         }
     }
 
@@ -165,7 +171,7 @@ public class CivVQuickRef_Controller implements Initializable {
         BufferedWriter xmlWriter = null;
         try {
             xmlReader = new BufferedReader(new InputStreamReader(getClass().
-                    getClassLoader().getResourceAsStream("resources/data/" + FILE), "UTF-8"));
+                    getClassLoader().getResourceAsStream("civvquickref/resources/data/" + FILE), "UTF-8"));
             xmlWriter = new BufferedWriter(new FileWriter(DATA_FOLDER + FILE));
             String line;
             while ((line = xmlReader.readLine()) != null) {
@@ -203,12 +209,14 @@ public class CivVQuickRef_Controller implements Initializable {
         BufferedReader imgLookupReader = null;
         try {
             imgLookupReader = new BufferedReader(new InputStreamReader(
-                    getClass().getClassLoader().getResourceAsStream("resources/data/imglookup.txt")));
+                    getClass().getClassLoader().getResourceAsStream(
+                            "civvquickref/resources/data/imglookup.txt")));
 
             String imgFile;
             BufferedImage img;
             while ((imgFile = imgLookupReader.readLine()) != null) {
-                img = ImageIO.read(getClass().getClassLoader().getResource("resources/data/img/" + imgFile));
+                img = ImageIO.read(getClass().getClassLoader().getResource(
+                        "civvquickref/resources/data/img/" + imgFile));
                 ImageIO.write(img, "png", new File(IMG_FOLDER + imgFile));
             }
         } catch (IOException ex) {
@@ -303,23 +311,24 @@ public class CivVQuickRef_Controller implements Initializable {
     }
 
     /**
-     * Handler for the ComboBox item changing event. 
-     * 
-     * Possible problem: When using the sort method with the ObservableList 
-     * which contains all the elements of the ComboBox, the onAction event 
-     * handled by this method is fired, leading to an InvocationTargetException. 
-     * This is solved by doing a null check on the selected item of the ComboBox. 
-     * 
+     * Handler for the ComboBox item changing event.
+     *
+     * Possible problem: When using the sort method with the ObservableList
+     * which contains all the elements of the ComboBox, the onAction event
+     * handled by this method is fired, leading to an InvocationTargetException.
+     * This is solved by doing a null check on the selected item of the
+     * ComboBox.
+     *
      * https://stackoverflow.com/questions/40561850/javafx-combobox-setitems-triggers-onaction-event
      *
      * @throws java.net.URISyntaxException
      */
     @FXML
     public void civilizationChanged() throws URISyntaxException {
-        
+
         CivilizationList.Civ selectedCiv
                 = (CivilizationList.Civ) civilizationList.getSelectionModel().getSelectedItem();
-        
+
         if (selectedCiv != null) {
             File file = new File(IMG_FOLDER + selectedCiv.getCivimg());
             Image image = new Image(file.toURI().toString());
@@ -329,13 +338,15 @@ public class CivVQuickRef_Controller implements Initializable {
             leaderName.setText(selectedCiv.getCivleader());
             civilizationSkill.setText(selectedCiv.getCivskill());
 
-            unitName1.setText(selectedCiv.getCivunits().getUnit().get(0).getUnitname());
-            unitType1.setText(selectedCiv.getCivunits().getUnit().get(0).getUnittype());
-            unitReplaces1.setText(selectedCiv.getCivunits().getUnit().get(0).getUnitreplaces());
+            CivilizationList.Civ.Civunits.Unit unit1 = selectedCiv.getCivunits().getUnit().get(0);
+            unitName1.setText(unit1.getUnitname());
+            unitType1.setText(unit1.getUnittype());
+            unitReplaces1.setText(unit1.getUnitreplaces());
 
-            unitName2.setText(selectedCiv.getCivunits().getUnit().get(1).getUnitname());
-            unitType2.setText(selectedCiv.getCivunits().getUnit().get(1).getUnittype());
-            unitReplaces2.setText(selectedCiv.getCivunits().getUnit().get(1).getUnitreplaces());
+            CivilizationList.Civ.Civunits.Unit unit2 = selectedCiv.getCivunits().getUnit().get(1);
+            unitName2.setText(unit2.getUnitname());
+            unitType2.setText(unit2.getUnittype());
+            unitReplaces2.setText(unit2.getUnitreplaces());
         }
     }
 
@@ -385,8 +396,82 @@ public class CivVQuickRef_Controller implements Initializable {
         }
     }
 
+    @FXML
+    public void editCivMenuSelected(ActionEvent event) {
+
+        if (civilizationListSource.isEmpty()) {
+            infoAlert.setContentText("The civilization list is empty.");
+            infoAlert.showAndWait();
+        } 
+        else {
+            Parent root;
+
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().
+                        getResource("civvquickref/resources/view/createciv.fxml"));
+                root = loader.load();
+
+                CreateCiv_Controller editController = loader.getController();
+                int index = civilizationList.getSelectionModel().getSelectedIndex();
+                editController.setCivilization(civilizationListSource.get(index));
+                editController.initializeCivFields();
+
+                Scene editCivScene = new Scene(root);
+                Stage editCivStage = new Stage();
+                editCivStage.setTitle("Edit civilization");
+                editCivStage.setScene(editCivScene);
+                editCivStage.setOnHiding((WindowEvent event1) -> {
+                    Platform.runLater(() -> {
+                        if (!editController.isCivilizationCreated()) {
+                            try {
+                                FXCollections.sort(civilizationListSource,
+                                        new CivNameComparator());
+                                civDAO.saveCivs(civilizationListSource, mod);
+                            } catch (Exception ex) {
+                                Logger.getLogger(CivVQuickRef_Controller.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                        //civilizationImage.setImage(new Image(createController.getImageURI().toString()));
+
+                        // TODO Copy chosen image from created civ into img folder.
+                    });
+                });
+
+                editCivStage.show();
+            } catch (IOException ex) {
+                Logger.getLogger(CivVQuickRef_Controller.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    @FXML
+    public void deleteCivMenuSelected(ActionEvent event) {
+        if (civilizationListSource.isEmpty()) {
+            infoAlert.setContentText("The civilization list is empty.");
+            infoAlert.showAndWait();
+        } 
+        else {
+            confirmAlert.setContentText("Are you sure you want to delete the "
+                    + "selected civilization?");
+            confirmAlert.showAndWait();
+            
+            if (confirmAlert.getResult() == ButtonType.OK) {
+                try {
+                    int selectedIndex = civilizationList.getSelectionModel().getSelectedIndex();
+                    civilizationListSource.remove(selectedIndex);
+                    civDAO.saveCivs(civilizationListSource, mod);
+                } catch (Exception ex) {
+                    errorAlert.setHeaderText(ex.getClass().getSimpleName());
+                    errorAlert.setContentText("There was an error while saving "
+                            + "the changes.");
+                    errorAlert.showAndWait();
+                }
+            }
+        }
+    }
+
     /**
-     * This class implements the comparison of two Civ objects by their 
+     * This class implements the comparison of two Civ objects by their
      * civilization names.
      */
     private class CivNameComparator implements Comparator<CivilizationList.Civ> {

@@ -25,6 +25,8 @@
                 <Menu mnemonicParsing="false" text="Edit">
                     <items>
                         <MenuItem mnemonicParsing="false" text="Create civilization" onAction="#createCivMenuSelected" />
+                        <MenuItem mnemonicParsing="false" text="Edit selected" onAction="#editCivMenuSelected" />
+                        <MenuItem mnemonicParsing="false" text="Delete selected" onAction="#deleteCivMenuSelected" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Help">
@@ -92,7 +94,7 @@
                         <Font size="30.0" />
                     </font>
                 </Label>
-                <Label fx:id="civilizationSkill" prefHeight="76.0" prefWidth="535.0" text="The Great Warpath - Units move through Forest and Jungle in friendly territory as if they were Roads. These tiles can be used to establish City Connections upon researching The Wheel. Caravans move along Forest and Jungle as if they were Roads." wrapText="true" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3">
+                <Label fx:id="civilizationSkill" prefHeight="76.0" prefWidth="535.0" text="Civilization skill" wrapText="true" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3">
                     <font>
                         <Font size="14.0" />
                     </font>
