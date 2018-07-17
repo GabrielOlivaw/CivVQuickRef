@@ -23,7 +23,7 @@ public class CivVQuickRef extends Application{
     
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("view/civvquickref.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("resources/view/civvquickref.fxml"));
         
         Scene scene = new Scene(root);
         

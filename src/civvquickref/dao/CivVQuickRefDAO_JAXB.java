@@ -3,16 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package civvquickref.controller;
+package civvquickref.dao;
 
 import civvquickref.CivilizationList;
 import civvquickref.CivilizationVGame;
 import civvquickref.ObjectFactory;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
-import static java.util.stream.Collectors.toList;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
@@ -129,13 +128,11 @@ public class CivVQuickRefDAO_JAXB implements CivVQuickRefDAO {
         civVGame.setCivlist(civilizationList);
         civVGame.setMod(modName);
         
-        
-        
         // Marshall the CivilizationVGame
         
         Marshaller m = jaxbContext.createMarshaller();
         m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        m.marshal(factory.createCivilizationv(civVGame), System.out);
+        m.marshal(factory.createCivilizationv(civVGame), new File(xmlFile));
     }
     
     @Override

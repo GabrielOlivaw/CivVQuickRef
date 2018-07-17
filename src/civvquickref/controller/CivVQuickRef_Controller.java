@@ -5,6 +5,8 @@
  */
 package civvquickref.controller;
 
+import civvquickref.dao.CivVQuickRefDAO;
+import civvquickref.dao.CivVQuickRefDAO_JAXB;
 import civvquickref.CivilizationList;
 import civvquickref.createciv.controller.CreateCiv_Controller;
 import java.awt.image.BufferedImage;
@@ -18,8 +20,6 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Random;
 import java.util.ResourceBundle;
@@ -29,7 +29,6 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -166,7 +165,7 @@ public class CivVQuickRef_Controller implements Initializable {
         BufferedWriter xmlWriter = null;
         try {
             xmlReader = new BufferedReader(new InputStreamReader(getClass().
-                    getClassLoader().getResourceAsStream("data/" + FILE), "UTF-8"));
+                    getClassLoader().getResourceAsStream("resources/data/" + FILE), "UTF-8"));
             xmlWriter = new BufferedWriter(new FileWriter(DATA_FOLDER + FILE));
             String line;
             while ((line = xmlReader.readLine()) != null) {
@@ -204,12 +203,12 @@ public class CivVQuickRef_Controller implements Initializable {
         BufferedReader imgLookupReader = null;
         try {
             imgLookupReader = new BufferedReader(new InputStreamReader(
-                    getClass().getClassLoader().getResourceAsStream("data/imglookup.txt")));
+                    getClass().getClassLoader().getResourceAsStream("resources/data/imglookup.txt")));
 
             String imgFile;
             BufferedImage img;
             while ((imgFile = imgLookupReader.readLine()) != null) {
-                img = ImageIO.read(getClass().getClassLoader().getResource("data/img/" + imgFile));
+                img = ImageIO.read(getClass().getClassLoader().getResource("resources/data/img/" + imgFile));
                 ImageIO.write(img, "png", new File(IMG_FOLDER + imgFile));
             }
         } catch (IOException ex) {
@@ -352,7 +351,7 @@ public class CivVQuickRef_Controller implements Initializable {
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().
-                    getResource("civvquickref/createciv/view/createciv.fxml"));
+                    getResource("civvquickref/resources/view/createciv.fxml"));
             root = loader.load();
             //root = FXMLLoader.load(getClass().getClassLoader().getResource("civvquickref/createciv/view/createciv.fxml"));
 

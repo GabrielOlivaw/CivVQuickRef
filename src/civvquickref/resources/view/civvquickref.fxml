@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.*?>
 <VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="civvquickref.controller.CivVQuickRef_Controller" styleClass="root">
     <stylesheets>
-        <URL value="@civVQuickRef.css" />
+        <URL value="@../style/civVQuickRef.css" />
     </stylesheets>
     <children>
         <MenuBar>
@@ -58,7 +58,7 @@
                     <graphic>
                         <ImageView fitHeight="40.0" fitWidth="39.0">
                             <image>
-                                <Image url="@random.png" />
+                                <Image url="@../image/random.png" />
                             </image>
                         </ImageView>
                     </graphic>
@@ -72,7 +72,7 @@
                     <graphic>
                         <ImageView fx:id="civilizationImage" fitHeight="60.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@civimg.png" />
+                                <Image url="@../image/civimg.png" />
                             </image>
                         </ImageView>
                     </graphic>

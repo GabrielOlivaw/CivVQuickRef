@@ -7,10 +7,15 @@ package civvquickref.createciv.controller;
 
 import civvquickref.CivilizationList;
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -31,6 +36,8 @@ import org.apache.commons.io.FilenameUtils;
  * @author gabag
  */
 public class CreateCiv_Controller implements Initializable {
+    
+    private static final String IMG_FOLDER = "./data/img/";
     
     @FXML
     private TextField civName;
@@ -118,8 +125,14 @@ public class CreateCiv_Controller implements Initializable {
         civilization.setCivleader(civLeader.getText());
         civilization.setCivskill(civSkill.getText());
         String civImgStr = "";
-        if (imageURI != null)
-            civImgStr = FilenameUtils.getName(imageURI.getPath());
+        if (imageURI != null) {
+            try {
+                civImgStr = FilenameUtils.getName(imageURI.getPath());
+                copyImg();
+            } catch (IOException ex) {
+                Logger.getLogger(CreateCiv_Controller.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         civilization.setCivimg(civImgStr);
         
         CivilizationList.Civ.Civunits.Unit unit1 = 
@@ -144,6 +157,22 @@ public class CreateCiv_Controller implements Initializable {
         civilizationCreated = true;
         
         ((Button) event.getSource()).getScene().getWindow().hide();
+    }
+    
+    /**
+     * This method copies the selected image into the img folder of the program 
+     * data folder, if it doesn't exist there. This is done because the XML with 
+     * the civilization data stores the names of the civilization image files 
+     * inside the img folder.
+     * @throws java.io.IOException
+     */
+    public void copyImg() throws IOException {
+        File selectedImg = new File(imageURI.getPath());
+        File targetImgLocation = new File(IMG_FOLDER + FilenameUtils.
+                getName(imageURI.getPath()));
+        if (!targetImgLocation.exists())
+            Files.copy(Paths.get(imageURI), targetImgLocation.toPath());
+            
     }
     
     public CivilizationList.Civ getCivilization() {
