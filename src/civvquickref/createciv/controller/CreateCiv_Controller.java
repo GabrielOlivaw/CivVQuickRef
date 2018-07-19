@@ -92,6 +92,8 @@ public class CreateCiv_Controller implements Initializable {
         imageChooser.setTitle("Choose civilization icon");
         imageChooser.getExtensionFilters().add(new ExtensionFilter("Image files",
                 Arrays.asList("*.jpg", "*.png")));
+        String curPath = Paths.get(IMG_FOLDER).toAbsolutePath().normalize().toString();
+        imageChooser.setInitialDirectory(new File(curPath));
 
     }
     
@@ -136,8 +138,6 @@ public class CreateCiv_Controller implements Initializable {
             imageURI = file.toURI();
 
             civilizationImage.setImage(new Image(imageURI.toString()));
-
-            System.out.println(FilenameUtils.getName(imageURI.getPath()));
         }
     }
 

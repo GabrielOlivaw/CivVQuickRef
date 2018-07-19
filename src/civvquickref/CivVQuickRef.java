@@ -16,7 +16,17 @@ import javafx.stage.Stage;
  * popular strategy game.
  * It shows information about the different civilizations you can play.
  * This application uses XML to save and load said information using JAXB.
- *
+ * 
+ * Warning about NetBeans JAXB binding: the generated classes will have comments 
+ * using the system locale, so if those comments have strange characters, it will 
+ * mess with the UTF-8 encoding and it will prevent you from building the project. 
+ * Solution: go to NetBeans installation folder\etc\netbeans.conf and add these 
+ * options to netbeans_default_options inside the quotes: 
+ * -J-Dfile.encoding=UTF-8 -J-Duser.language=en
+ * Then, restart the NetBeans IDE, delete the existing JAXB binding and create 
+ * another one. Now every comment in the generated classes will be in english 
+ * and the problem with strange characters will be prevented.
+ * 
  * @author gabag
  */
 public class CivVQuickRef extends Application{

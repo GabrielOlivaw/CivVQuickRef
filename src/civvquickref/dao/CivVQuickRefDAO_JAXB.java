@@ -123,8 +123,6 @@ public class CivVQuickRefDAO_JAXB implements CivVQuickRefDAO {
         List<CivilizationList.Civ> civ = civilizationList.getCiv();
         civ.addAll(civList);
         
-        System.out.println(civ.get(civ.size()-1).getCivname());
-        
         civVGame.setCivlist(civilizationList);
         civVGame.setMod(modName);
         
@@ -133,6 +131,10 @@ public class CivVQuickRefDAO_JAXB implements CivVQuickRefDAO {
         Marshaller m = jaxbContext.createMarshaller();
         m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
         m.marshal(factory.createCivilizationv(civVGame), new File(xmlFile));
+    }
+    
+    public void setXmlFile(String xmlFile) {
+        this.xmlFile = xmlFile;
     }
     
     @Override

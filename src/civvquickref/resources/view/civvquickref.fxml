@@ -16,8 +16,8 @@
             <menus>
                 <Menu mnemonicParsing="false" text="File">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Open" />
-                        <MenuItem mnemonicParsing="false" text="Save" />
+                        <MenuItem mnemonicParsing="false" text="New" onAction="#newMenuSelected" />
+                        <MenuItem mnemonicParsing="false" text="Open" onAction="#openMenuSelected" />
                         <SeparatorMenuItem />
                         <MenuItem mnemonicParsing="false" text="Exit" />
                     </items>
@@ -74,7 +74,7 @@
                     <graphic>
                         <ImageView fx:id="civilizationImage" fitHeight="60.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@../image/civimg.png" />
+                                <Image url="@../image/civnoimg.png" />
                             </image>
                         </ImageView>
                     </graphic>

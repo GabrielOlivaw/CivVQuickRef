@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <schemas xmlns='http://xml.netbeans.org/schema/JAXBWizConfig' destdir='build/generated-sources/jaxb' projectName='CivVQuickRef' version='1.0'>
-	<schema type='-xmlschema' package='civvquickref' name='CivVQuickRef'>
+	<schema type='-xmlschema' package='civvquickref' name='civvquickref'>
 		<xjc-options>
 		</xjc-options>
 		<schema-sources>
-			<schema-source location='xml-resources/jaxb/CivVQuickRef/CivVQuickRef.xsd' origLocation='CivVQuickRef.xsd'/>
+			<schema-source location='xml-resources/jaxb/civvquickref/CivVQuickRef.xsd' origLocation='CivVQuickRef.xsd'/>
 		</schema-sources>
 		<bindings>
 		</bindings>

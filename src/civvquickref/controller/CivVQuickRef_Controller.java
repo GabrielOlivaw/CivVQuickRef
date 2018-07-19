@@ -20,7 +20,9 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.Comparator;
+import java.util.Optional;
 import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -39,8 +41,11 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.StringConverter;
@@ -56,7 +61,8 @@ public class CivVQuickRef_Controller implements Initializable {
 
     private static final String DATA_FOLDER = "./data/";
     private static final String IMG_FOLDER = "./data/img/";
-    private static final String FILE = "CivVQuickRef.xml";
+    private static final String CIV_NO_IMG = "civnoimg.png";
+    private String xmlFile = "CivVQuickRef.xml";
 
     private CivVQuickRefDAO civDAO;
 
@@ -98,6 +104,8 @@ public class CivVQuickRef_Controller implements Initializable {
     private Alert errorAlert;
     private Alert infoAlert;
     private Alert confirmAlert;
+    
+    private FileChooser xmlFileChooser;
 
     private Random rnd;
 
@@ -111,8 +119,9 @@ public class CivVQuickRef_Controller implements Initializable {
         rnd = new Random();
 
         try {
+            initializeXmlFileChooser();
             initializeFiles();
-            loadData();
+            loadData(DATA_FOLDER + xmlFile);
         } catch (URISyntaxException ex) {
             errorAlert.setContentText(ex.getMessage());
             errorAlert.showAndWait();
@@ -126,6 +135,14 @@ public class CivVQuickRef_Controller implements Initializable {
             errorAlert.setContentText(ex.getMessage());
             errorAlert.showAndWait();
         }
+    }
+    
+    private void initializeXmlFileChooser() {
+        xmlFileChooser = new FileChooser();
+        String curPath = Paths.get(DATA_FOLDER).toAbsolutePath().normalize().toString();
+        xmlFileChooser.setInitialDirectory(new File(curPath));
+        xmlFileChooser.setTitle("Choose Civilization XML file");
+        xmlFileChooser.getExtensionFilters().add(new ExtensionFilter("XML files", "*.xml"));
     }
 
     /**
@@ -143,21 +160,21 @@ public class CivVQuickRef_Controller implements Initializable {
     private void initializeFiles() throws URISyntaxException, FileNotFoundException, IOException {
 
         // Check if the data folder exists.
-        File dataFolder = new File(DATA_FOLDER);
-        if (!dataFolder.exists()) {
-            dataFolder.mkdir();
+        File dataInitFolder = new File(DATA_FOLDER);
+        if (!dataInitFolder.exists()) {
+            dataInitFolder.mkdir();
         }
 
         // Check if the XML exists.
-        File xmlFile = new File(DATA_FOLDER + FILE);
-        if (!xmlFile.exists()) {
+        File xmlInitFile = new File(DATA_FOLDER + this.xmlFile);
+        if (!xmlInitFile.exists()) {
             initializeXml();
         }
 
         // Check if the img folder exists.
-        File imgFolder = new File(IMG_FOLDER);
-        if (!imgFolder.exists()) {
-            imgFolder.mkdir();
+        File imgInitFolder = new File(IMG_FOLDER);
+        if (!imgInitFolder.exists()) {
+            imgInitFolder.mkdir();
             initializeImg();
         }
     }
@@ -171,8 +188,8 @@ public class CivVQuickRef_Controller implements Initializable {
         BufferedWriter xmlWriter = null;
         try {
             xmlReader = new BufferedReader(new InputStreamReader(getClass().
-                    getClassLoader().getResourceAsStream("civvquickref/resources/data/" + FILE), "UTF-8"));
-            xmlWriter = new BufferedWriter(new FileWriter(DATA_FOLDER + FILE));
+                    getClassLoader().getResourceAsStream("civvquickref/resources/data/" + xmlFile), "UTF-8"));
+            xmlWriter = new BufferedWriter(new FileWriter(DATA_FOLDER + xmlFile));
             String line;
             while ((line = xmlReader.readLine()) != null) {
                 xmlWriter.write(line);
@@ -233,32 +250,35 @@ public class CivVQuickRef_Controller implements Initializable {
     /**
      * Loads all the data contained in the XML file.
      *
+     * @param xmlFileRoute The route of the XML file to load
      * @throws JAXBException
      * @throws FileNotFoundException
      * @throws URISyntaxException
      * @throws Exception
      */
-    private void loadData() throws JAXBException, FileNotFoundException,
+    private void loadData(String xmlFileRoute) throws JAXBException, FileNotFoundException,
             URISyntaxException, Exception {
 
-        civDAO = new CivVQuickRefDAO_JAXB(DATA_FOLDER + FILE);
+        civDAO = new CivVQuickRefDAO_JAXB(xmlFileRoute);
 
         civilizationListSource = FXCollections.observableList(civDAO.loadCivs());
 
         civilizationList.setItems(civilizationListSource);
-        civilizationList.setConverter(new StringConverter<CivilizationList.Civ>() {
-            @Override
-            public String toString(CivilizationList.Civ object) {
-                return object.getCivname();
-            }
+        if (civilizationList.getConverter() != null) {
+            civilizationList.setConverter(new StringConverter<CivilizationList.Civ>() {
+                @Override
+                public String toString(CivilizationList.Civ object) {
+                    return object.getCivname();
+                }
 
-            @Override
-            public CivilizationList.Civ fromString(String string) {
-                //throw new UnsupportedOperationException("Not supported yet.");
-                return findCiv(civilizationListSource, string);
-            }
+                @Override
+                public CivilizationList.Civ fromString(String string) {
+                    //throw new UnsupportedOperationException("Not supported yet.");
+                    return findCiv(civilizationListSource, string);
+                }
 
-        });
+            });
+        }
 
         civilizationList.getSelectionModel().selectFirst();
         civilizationChanged();
@@ -306,8 +326,10 @@ public class CivVQuickRef_Controller implements Initializable {
     public void randomPressed() throws URISyntaxException {
         int numCivs = civilizationList.getItems().size();
 
-        civilizationList.getSelectionModel().select(rnd.nextInt(numCivs));
-        civilizationChanged();
+        if (numCivs > 0) {
+            civilizationList.getSelectionModel().select(rnd.nextInt(numCivs));
+            civilizationChanged();
+        }
     }
 
     /**
@@ -483,6 +505,92 @@ public class CivVQuickRef_Controller implements Initializable {
             return civ1.compareTo(civ2);
         }
 
+    }
+    
+    /**
+     * Open menu handler. It shows an open dialog to allow the user to choose a 
+     * XML file. Then, it tries to load its data, checking if the file has the 
+     * correct CivilizationVGame XML structure.
+     * 
+     * @param event 
+     */
+    @FXML
+    public void openMenuSelected(ActionEvent event) {
+        File file = xmlFileChooser.showOpenDialog(modName.getScene().getWindow());
+        
+        /*
+        Very important: we use the xmlPath local variable to temporarily save the 
+        route of the XML file and then we pass it to the xmlFile global variable 
+        after creating the DAO with the route and checking if that file has the 
+        correct XML element structure.
+        */
+        String xmlPath;
+        if (file != null) {
+            try {
+                xmlPath = file.getPath();
+                loadData(xmlPath);
+                xmlFile = xmlPath;
+            } catch (JAXBException ex) {
+                // 
+                civDAO = new CivVQuickRefDAO_JAXB(xmlFile);
+                errorAlert.setContentText("The chosen XML file doesn't have the "
+                        + "proper CivilizationVGame structure.");
+                errorAlert.showAndWait();
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(CivVQuickRef_Controller.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (URISyntaxException ex) {
+                Logger.getLogger(CivVQuickRef_Controller.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception ex) {
+                Logger.getLogger(CivVQuickRef_Controller.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    @FXML
+    public void newMenuSelected(ActionEvent event) {
+        File file = xmlFileChooser.showSaveDialog(modName.getScene().getWindow());
+        
+        if (file != null) {
+            emptyCivs();
+            xmlFile = file.getPath();
+            
+            civDAO = new CivVQuickRefDAO_JAXB(xmlFile);            
+            fileName.setText(civDAO.getSource());
+            
+            mod = "";
+            TextInputDialog input = new TextInputDialog();
+            input.setTitle("Mod name");
+            input.setHeaderText("Insert new CivilizationVGame mod name");
+            input.setContentText("Mod name:");
+            Optional<String> result = input.showAndWait();
+            result.ifPresent(newModName -> { 
+                mod = newModName;
+                
+                modName.setText(mod);
+            });                       
+        }
+    }
+    
+    private void emptyCivs() {
+        civilizationListSource.clear();
+        
+        modName.setText("Core - Mod name");
+        
+        civilizationName.setText("Civilization name");
+        leaderName.setText("Leader name");
+        civilizationSkill.setText("Civilization skill");
+        
+        File file = new File(IMG_FOLDER + CIV_NO_IMG);
+        Image image = new Image(file.toURI().toString());
+        civilizationImage.setImage(image);
+        
+        unitName1.setText("Unit name");
+        unitType1.setText("Unit type");
+        unitReplaces1.setText("Unit replaces");
+        
+        unitName2.setText("Unit name");
+        unitType2.setText("Unit type");
+        unitReplaces2.setText("Unit replaces");
     }
 
 }

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<civilizationv>
+    <mod>Bravo Nuevo Mundo</mod>
+    <civlist>
+        <civ>
+            <civname>Los Pollos Primos</civname>
+            <civleader>mangelrogel</civleader>
+            <civimg>carabela.jpg</civimg>
+            <civskill>Loquendos</civskill>
+            <civunits>
+                <unit>
+                    <unitname>GTASA</unitname>
+                    <unittype>Improvement</unittype>
+                    <unitreplaces></unitreplaces>
+                </unit>
+                <unit>
+                    <unitname>marvado</unitname>
+                    <unittype>Unit</unittype>
+                    <unitreplaces>rutilofilo</unitreplaces>
+                </unit>
+            </civunits>
+        </civ>
+        <civ>
+            <civname>Sony</civname>
+            <civleader>Javier el Honrado</civleader>
+            <civimg>night-palms-wallpaper-1.jpg</civimg>
+            <civskill>Vender mucho</civskill>
+            <civunits>
+                <unit>
+                    <unitname>Playstation 3</unitname>
+                    <unittype>Building</unittype>
+                    <unitreplaces>Playstation 2</unitreplaces>
+                </unit>
+                <unit>
+                    <unitname>Retrocompatibilidad</unitname>
+                    <unittype>Improvement</unittype>
+                    <unitreplaces></unitreplaces>
+                </unit>
+            </civunits>
+        </civ>
+    </civlist>
+</civilizationv>
