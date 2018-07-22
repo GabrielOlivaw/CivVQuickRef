@@ -14,14 +14,14 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -77,14 +77,25 @@ public class CreateCiv_Controller implements Initializable {
     private CivilizationList.Civ civilization;
     
     private boolean civilizationCreated;
+    
+    private Alert errorAlert;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        
+        errorAlert = new Alert(Alert.AlertType.ERROR, "", ButtonType.OK);
+        
         civilizationCreated = false;
         
         initializeFileChooser();
         initializeComboBox();
             
+    }
+    
+    private void showErrorAlert(Exception ex) {
+        errorAlert.setHeaderText(ex.getClass().getSimpleName());
+        errorAlert.setContentText(ex.getMessage());
+        errorAlert.showAndWait();
     }
 
     private void initializeFileChooser() {
@@ -162,7 +173,7 @@ public class CreateCiv_Controller implements Initializable {
                 civImgStr = FilenameUtils.getName(imageURI.getPath());
                 copyImg();
             } catch (IOException ex) {
-                Logger.getLogger(CreateCiv_Controller.class.getName()).log(Level.SEVERE, null, ex);
+                showErrorAlert(ex);
             }
         }
         civilization.setCivimg(civImgStr);

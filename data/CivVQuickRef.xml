@@ -1,23 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-
-
-<civilizationv xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xsi:noNamespaceSchemaLocation="CivVQuickRef.xsd">
-    
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<civilizationv>
     <mod>Core - Brave New World</mod>
-    
     <civlist>
         <civ>
             <civname>American</civname>
             <civleader>Washington</civleader>
             <civimg>american.png</civimg>
             <civskill>Manifest Destiny - All land military units have +1 Sight. 50% discount when purchasing tiles.</civskill>
-            
             <civunits>
                 <unit>
                     <unitname>B17</unitname>
@@ -36,7 +25,6 @@ and open the template in the editor.
             <civleader>Harun al-Rashid</civleader>
             <civimg>arabian.png</civimg>
             <civskill>Ships of the Desert - Caravans gain 50% extended range. Your trade routes spread the home city's religion twice as effectively. Oil resources are doubled.</civskill>
-            
             <civunits>
                 <unit>
                     <unitname>Camel Archer</unitname>
@@ -55,7 +43,6 @@ and open the template in the editor.
             <civleader>Ashurbanipal</civleader>
             <civimg>assyrian.png</civimg>
             <civskill>Treasures of Nineveh - When a city is conquered, gain a free Technology already discovered by its owner. Gaining a city through a trade deal does not count, and it can only happen once per enemy city.</civskill>
-            
             <civunits>
                 <unit>
                     <unitname>Siege tower</unitname>
@@ -74,7 +61,6 @@ and open the template in the editor.
             <civleader>Maria Theresa</civleader>
             <civimg>austrian.png</civimg>
             <civskill>Diplomatic Marriage - Can spend Gold to annex or puppet a City-State that has been your ally for 5 turns.</civskill>
-            
             <civunits>
                 <unit>
                     <unitname>Hussar</unitname>
@@ -93,7 +79,6 @@ and open the template in the editor.
             <civleader>Montezuma</civleader>
             <civimg>aztec.png</civimg>
             <civskill>Sacrificial Captives - Gains Culture for the empire from each enemy unit killed.</civskill>
-            
             <civunits>
                 <unit>
                     <unitname>Jaguar</unitname>
@@ -112,7 +97,6 @@ and open the template in the editor.
             <civleader>Nebuchadnezzar II</civleader>
             <civimg>babylonian.png</civimg>
             <civskill>Ingenuity - Receive free Great Scientist when you discover Writing. Earn Great Scientists 50% faster.</civskill>
-            
             <civunits>
                 <unit>
                     <unitname>Bowman</unitname>
@@ -131,7 +115,6 @@ and open the template in the editor.
             <civleader>Pedro II</civleader>
             <civimg>brazilian.png</civimg>
             <civskill>Carnival - Tourism output is +100% during their Golden Ages. Earn Great Artists, Musicians, and Writers 50% faster during their Golden Ages.</civskill>
-            
             <civunits>
                 <unit>
                     <unitname>Pracinha</unitname>
@@ -150,7 +133,6 @@ and open the template in the editor.
             <civleader>Theodora</civleader>
             <civimg>byzantine.png</civimg>
             <civskill>Patriarchate of Constantinople - Choose one more Belief than normal when you found a Religion.</civskill>
-            
             <civunits>
                 <unit>
                     <unitname>Cataphract</unitname>
@@ -169,7 +151,6 @@ and open the template in the editor.
             <civleader>Dido</civleader>
             <civimg>carthaginian.png</civimg>
             <civskill>Phoenician Heritage - All coastal Cities get a free Harbor. Units may cross mountains after the first Great General is earned, taking 50 HP damage if they end a turn on a mountain.</civskill>
-            
             <civunits>
                 <unit>
                     <unitname>African Forest Elephant</unitname>
@@ -188,7 +169,6 @@ and open the template in the editor.
             <civleader>Boudicca</civleader>
             <civimg>celtic.png</civimg>
             <civskill>Druidic Lore - +1 Faith per city with an adjacent unimproved Forest. Bonus increases to +2 Faith in Cities with 3 or more adjacent unimproved Forest tiles.</civskill>
-            
             <civunits>
                 <unit>
                     <unitname>Pictish Warrior</unitname>
@@ -207,7 +187,6 @@ and open the template in the editor.
             <civleader>Wu Zetian</civleader>
             <civimg>chinese.png</civimg>
             <civskill>Art of War - The Great General combat bonus is increased by 15%, and their spawn rate is increased by 50%.</civskill>
-            
             <civunits>
                 <unit>
                     <unitname>Chu-Ko-Nu</unitname>
@@ -226,7 +205,6 @@ and open the template in the editor.
             <civleader>Harald Bluetooth</civleader>
             <civimg>danish.png</civimg>
             <civskill>Viking Fury - Embarked units have +1 Movement and pay just 1 movement point to move from sea to land. Melee units pay no movement point cost to pillage.</civskill>
-            
             <civunits>
                 <unit>
                     <unitname>Berserker</unitname>
@@ -245,7 +223,6 @@ and open the template in the editor.
             <civleader>William</civleader>
             <civimg>dutch.png</civimg>
             <civskill>Dutch East India Company - Retains 50% of the Happiness benefits from a Luxury Resource if your last copy of it is traded away.</civskill>
-            
             <civunits>
                 <unit>
                     <unitname>Sea Beggar</unitname>
@@ -264,7 +241,6 @@ and open the template in the editor.
             <civleader>Ramesses II</civleader>
             <civimg>egyptian.png</civimg>
             <civskill>Monument Builders - +20% Production towards Wonder construction.</civskill>
-            
             <civunits>
                 <unit>
                     <unitname>War Chariot</unitname>
@@ -283,7 +259,6 @@ and open the template in the editor.
             <civleader>Elizabeth</civleader>
             <civimg>english.png</civimg>
             <civskill>Sun Never Sets - +2 Movement for all naval units. Receives 1 extra Spy.</civskill>
-            
             <civunits>
                 <unit>
                     <unitname>Longbowman</unitname>
@@ -297,12 +272,11 @@ and open the template in the editor.
                 </unit>
             </civunits>
         </civ>
-		<civ>
+        <civ>
             <civname>Ethiopian</civname>
             <civleader>Haile Selassie</civleader>
             <civimg>ethiopian.png</civimg>
             <civskill>Spirit of Adwa - Combat bonus (+20%) when fighting units from a Civilization with more Cities than Ethiopia.</civskill>
-            
             <civunits>
                 <unit>
                     <unitname>Mehal Sefari</unitname>
@@ -321,7 +295,6 @@ and open the template in the editor.
             <civleader>Napoleon</civleader>
             <civimg>french.png</civimg>
             <civskill>City of Light - Museum and World Wonder theme bonuses are doubled in their Capital.</civskill>
-            
             <civunits>
                 <unit>
                     <unitname>Musketeer</unitname>
@@ -340,7 +313,6 @@ and open the template in the editor.
             <civleader>Bismarck</civleader>
             <civimg>german.png</civimg>
             <civskill>Furor Teutonicus - Upon defeating a Barbarian unit inside an encampment, there is a 67% chance you earn 25 Gold and they join your side. Pay 25% less for land unit maintenance.</civskill>
-            
             <civunits>
                 <unit>
                     <unitname>Panzer</unitname>
@@ -359,7 +331,6 @@ and open the template in the editor.
             <civleader>Alexander</civleader>
             <civimg>greek.png</civimg>
             <civskill>Hellenic League - City-State Influence degrades at half and recovers at twice the normal rate.</civskill>
-            
             <civunits>
                 <unit>
                     <unitname>Companion Cavalry</unitname>
@@ -378,7 +349,6 @@ and open the template in the editor.
             <civleader>Attila</civleader>
             <civimg>hunnic.png</civimg>
             <civskill>Scourge of God - Raze Cities at double speed. Borrow City names from other in-game Civs. Start with Animal Husbandry technology. +1 Production per Pasture.</civskill>
-            
             <civunits>
                 <unit>
                     <unitname>Horse Archer</unitname>
@@ -392,12 +362,11 @@ and open the template in the editor.
                 </unit>
             </civunits>
         </civ>
-		<civ>
+        <civ>
             <civname>Incan</civname>
             <civleader>Pachacuti</civleader>
             <civimg>incan.png</civimg>
             <civskill>Great Andean Road - Units ignore terrain costs when moving into any tile with Hills. No maintenance costs for improvements in Hills; half cost elsewhere.</civskill>
-            
             <civunits>
                 <unit>
                     <unitname>Slinger</unitname>
@@ -411,12 +380,11 @@ and open the template in the editor.
                 </unit>
             </civunits>
         </civ>
-		<civ>
+        <civ>
             <civname>Indian</civname>
             <civleader>Gandhi</civleader>
             <civimg>indian.png</civimg>
             <civskill>Population Growth - Unhappiness from number of Cities doubled, Unhappiness from number of Citizens halved.</civskill>
-            
             <civunits>
                 <unit>
                     <unitname>War Elephant</unitname>
@@ -435,7 +403,6 @@ and open the template in the editor.
             <civleader>Gajah Mada</civleader>
             <civimg>indonesian.png</civimg>
             <civskill>Spice Islanders - The first 3 cities founded on continents other than where Indonesia started each provide 2 unique Luxury Resources (and can never be razed).</civskill>
-            
             <civunits>
                 <unit>
                     <unitname>Kris Swordsman</unitname>
@@ -454,7 +421,6 @@ and open the template in the editor.
             <civleader>Hiawatha</civleader>
             <civimg>iroquois.png</civimg>
             <civskill>The Great Warpath - Units move through Forest and Jungle in friendly territory as if they were Roads. These tiles can be used to establish City Connections upon researching The Wheel. Caravans move along Forest and Jungle as if they were Roads.</civskill>
-            
             <civunits>
                 <unit>
                     <unitname>Mohawk Warrior</unitname>
@@ -473,7 +439,6 @@ and open the template in the editor.
             <civleader>Oda Nobunaga</civleader>
             <civimg>japanese.png</civimg>
             <civskill>Bushido - Units fight as though they were at full strength even when damaged. +1 Culture from each Fishing Boat and +2 Culture from atolls.</civskill>
-            
             <civunits>
                 <unit>
                     <unitname>Samurai</unitname>
@@ -487,12 +452,11 @@ and open the template in the editor.
                 </unit>
             </civunits>
         </civ>
-		<civ>
+        <civ>
             <civname>Korean</civname>
             <civleader>Sejong</civleader>
             <civimg>korean.png</civimg>
             <civskill>Scholars of the Jade Hall - +2 Science for all specialists and Great Person tile improvements. Receive a tech boost each time a scientific building/Wonder is built in the Korean capital.</civskill>
-            
             <civunits>
                 <unit>
                     <unitname>Turtle Ship</unitname>
@@ -511,7 +475,6 @@ and open the template in the editor.
             <civleader>Pacal</civleader>
             <civimg>mayan.png</civimg>
             <civskill>The Long Count - After researching Theology, receive a bonus Great Person at the end of every Maya Long Count calendar cycle (every 394 years). Each bonus person can only be chosen once.</civskill>
-            
             <civunits>
                 <unit>
                     <unitname>Atlatlist</unitname>
@@ -530,7 +493,6 @@ and open the template in the editor.
             <civleader>Genghis Khan</civleader>
             <civimg>mongolian.png</civimg>
             <civskill>Mongol Terror - Combat Strength +30% when fighting City-State units or attacking a City-State itself. All mounted units have +1 Movement.</civskill>
-            
             <civunits>
                 <unit>
                     <unitname>Keshik</unitname>
@@ -549,7 +511,6 @@ and open the template in the editor.
             <civleader>Ahmad al-Mansur</civleader>
             <civimg>moroccan.png</civimg>
             <civskill>Gateway to Africa - Receives +3 Gold and +1 Culture for each Trade Route with a different civ or City-State. The Trade Route owners receive +2 Gold for each Trade Route sent to Morocco.</civskill>
-            
             <civunits>
                 <unit>
                     <unitname>Berber Cavalry</unitname>
@@ -568,7 +529,6 @@ and open the template in the editor.
             <civleader>Suleiman</civleader>
             <civimg>ottoman.png</civimg>
             <civskill>Barbary Corsairs - All melee naval units have the Prize Ships promotion, allowing them to capture defeated ships. Pay only one-third the usual cost for naval unit maintenance.</civskill>
-            
             <civunits>
                 <unit>
                     <unitname>Janissary</unitname>
@@ -587,7 +547,6 @@ and open the template in the editor.
             <civleader>Darius I</civleader>
             <civimg>persian.png</civimg>
             <civskill>Achaemenid Legacy - Golden Ages last 50% longer. During a Golden Age, units receive +1 Movement and a +10% Combat Strength bonus.</civskill>
-            
             <civunits>
                 <unit>
                     <unitname>Immortal</unitname>
@@ -601,12 +560,11 @@ and open the template in the editor.
                 </unit>
             </civunits>
         </civ>
-		<civ>
+        <civ>
             <civname>Polish</civname>
             <civleader>Casimir III</civleader>
             <civimg>polish.png</civimg>
             <civskill>Solidarity - Receive a free Social Policy when you advance to the next era.</civskill>
-            
             <civunits>
                 <unit>
                     <unitname>Winged Hussar</unitname>
@@ -619,12 +577,12 @@ and open the template in the editor.
                     <unitreplaces>Stable</unitreplaces>
                 </unit>
             </civunits>
-        </civ><civ>
+        </civ>
+        <civ>
             <civname>Polynesian</civname>
             <civleader>Kamehameha</civleader>
             <civimg>polynesian.png</civimg>
             <civskill>Wayfinding - Can embark and move over Oceans immediately. +1 Sight when embarked. +10% Combat Strength bonus if within 2 tiles of a Moai.</civskill>
-            
             <civunits>
                 <unit>
                     <unitname>Maori Warrior</unitname>
@@ -643,7 +601,6 @@ and open the template in the editor.
             <civleader>Maria I</civleader>
             <civimg>portuguese.png</civimg>
             <civskill>Mare Clausum - Resource diversity grants twice as much Gold for Portugal in Trade Routes.</civskill>
-            
             <civunits>
                 <unit>
                     <unitname>Nau</unitname>
@@ -662,7 +619,6 @@ and open the template in the editor.
             <civleader>Augustus Caesar</civleader>
             <civimg>roman.png</civimg>
             <civskill>The Glory of Rome - +25% Production towards any buildings that already exist in the Capital.</civskill>
-            
             <civunits>
                 <unit>
                     <unitname>Ballista</unitname>
@@ -681,7 +637,6 @@ and open the template in the editor.
             <civleader>Catherine</civleader>
             <civimg>russian.png</civimg>
             <civskill>Siberian Riches - Strategic Resources provide +1 Production, and Horse, Iron and Uranium Resources provide double quantity.</civskill>
-            
             <civunits>
                 <unit>
                     <unitname>Cossack</unitname>
@@ -700,7 +655,6 @@ and open the template in the editor.
             <civleader>Pocatello</civleader>
             <civimg>shoshone.png</civimg>
             <civskill>Great Expanse - Founded cities start with additional territory. Units receive a combat bonus when fighting within their own territory.</civskill>
-            
             <civunits>
                 <unit>
                     <unitname>Pathfinder</unitname>
@@ -719,7 +673,6 @@ and open the template in the editor.
             <civleader>Ramkhamhaeng</civleader>
             <civimg>siamese.png</civimg>
             <civskill>Father Governs Children - Food, Culture and Faith from friendly City-States increased by 50%.</civskill>
-            
             <civunits>
                 <unit>
                     <unitname>Naresuan's Elephant</unitname>
@@ -738,7 +691,6 @@ and open the template in the editor.
             <civleader>Askia</civleader>
             <civimg>songhai.png</civimg>
             <civskill>River Warlord - Receive triple Gold from Barbarian encampments and pillaging Cities. Land units gain the War Canoe and Amphibious promotions, strengthening them while embarked.</civskill>
-            
             <civunits>
                 <unit>
                     <unitname>Mandekalu Cavalry</unitname>
@@ -757,7 +709,6 @@ and open the template in the editor.
             <civleader>Isabella</civleader>
             <civimg>spanish.png</civimg>
             <civskill>Seven Cities of Gold - Gold bonus for discovering a Natural Wonder (bonus enhanced if first to discover it). Culture, Happiness and tile yields from Natural Wonders doubled.</civskill>
-            
             <civunits>
                 <unit>
                     <unitname>Tercio</unitname>
@@ -776,7 +727,6 @@ and open the template in the editor.
             <civleader>Gustavus Adolphus</civleader>
             <civimg>swedish.png</civimg>
             <civskill>Nobel Prize - Gain 90 Influence with a Great Person gift to a City-State. When declaring friendship, Sweden and their friend gain a +10% boost to Great Person generation.</civskill>
-            
             <civunits>
                 <unit>
                     <unitname>Hakkapeliitta</unitname>
@@ -795,7 +745,6 @@ and open the template in the editor.
             <civleader>Enrico Dandolo</civleader>
             <civimg>venetian.png</civimg>
             <civskill>Serenissima - Cannot gain settlers nor annex cities. Double the normal number of trade routes available. A Merchant of Venice appears after researching Optics. May purchase in puppeted cities.</civskill>
-            
             <civunits>
                 <unit>
                     <unitname>Merchant of Venice</unitname>
@@ -814,7 +763,6 @@ and open the template in the editor.
             <civleader>Shaka</civleader>
             <civimg>zulu.png</civimg>
             <civskill>Iklwa - Melee units cost 50% less maintenance. All units require 25% less experience to earn their next promotion.</civskill>
-            
             <civunits>
                 <unit>
                     <unitname>Impi</unitname>
@@ -829,5 +777,4 @@ and open the template in the editor.
             </civunits>
         </civ>
     </civlist>
-    
 </civilizationv>

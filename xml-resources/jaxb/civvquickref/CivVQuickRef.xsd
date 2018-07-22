@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified">
+    
+    <xs:element name="civilizationv" type="CivilizationVGame" />
+    
+    <!-- Every Civilization V game data includes the mod which it's based on and 
+    the list of civilizations it contains. -->
+    
+    <xs:complexType name="CivilizationVGame">
+        <xs:sequence>
+            <xs:element name="mod" type="xs:string" />
+            <xs:element name="civlist" type="CivilizationList" />
+        </xs:sequence>
+    </xs:complexType>
+    
+    <!-- The list of civilizations contained in the game data. -->
+    
+    <xs:complexType name="CivilizationList">
+        <xs:sequence>
+            
+            <!-- Each civilization is composed by its name, the name of the 
+            leader, the image file name, the unique skill of that civilization 
+            and the two unique units it has. -->
+            <xs:element name="civ" minOccurs="1" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="civname" type="xs:string" />
+                        
+                        <xs:element name="civleader" type="xs:string" />
+                        
+                        <xs:element name="civimg" type="xs:string" />
+                        
+                        <xs:element name="civskill" type="xs:string" />
+                        
+                        <!-- Each one of the two units of a civilization have a 
+                        name, a type (unit, building or improvement) and the 
+                        common unit it replaces. -->
+                        
+                        <xs:element name="civunits">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="unit" minOccurs="2" maxOccurs="2">
+                                        <xs:complexType>
+                                            <xs:sequence>
+                                                <xs:element name="unitname" type="xs:string" />
+                                                
+                                                <xs:element name="unittype">
+                                                    <xs:simpleType>
+                                                        <xs:restriction base="xs:string">
+                                                            <xs:enumeration value="Unit" />
+                                                            <xs:enumeration value="Building" />
+                                                            <xs:enumeration value="Improvement" />
+                                                        </xs:restriction>
+                                                    </xs:simpleType>
+                                                </xs:element>
+                                                
+                                                <xs:element name="unitreplaces" type="xs:string" />
+                                            </xs:sequence>
+                                        </xs:complexType>
+                                    </xs:element>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>

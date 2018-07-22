@@ -6,10 +6,13 @@
 package civvquickref;
 
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  * This is a quick reference guide about Sid Meier's Civilization V, the 
@@ -33,9 +36,14 @@ public class CivVQuickRef extends Application{
     
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("resources/view/civvquickref.fxml"));
+        Parent root = FXMLLoader.load(getClass().getClassLoader().
+                getResource("civvquickref/resources/view/civvquickref.fxml"));
         
         Scene scene = new Scene(root);
+        
+        primaryStage.setOnCloseRequest((WindowEvent event) -> {
+            Platform.exit();
+        });
         
         primaryStage.setTitle("CivVQuickRef");
         primaryStage.setScene(scene);

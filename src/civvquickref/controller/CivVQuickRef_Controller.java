@@ -101,10 +101,14 @@ public class CivVQuickRef_Controller implements Initializable {
     @FXML
     private Label unitReplaces2;
 
+    private Stage createCivStage;
+    private Stage editCivStage;
+    private Stage helpStage;
+
     private Alert errorAlert;
     private Alert infoAlert;
     private Alert confirmAlert;
-    
+
     private FileChooser xmlFileChooser;
 
     private Random rnd;
@@ -115,7 +119,7 @@ public class CivVQuickRef_Controller implements Initializable {
         errorAlert = new Alert(AlertType.ERROR, "", ButtonType.OK);
         infoAlert = new Alert(AlertType.INFORMATION, "", ButtonType.OK);
         confirmAlert = new Alert(AlertType.CONFIRMATION, "", ButtonType.OK, ButtonType.CANCEL);
-        
+
         rnd = new Random();
 
         try {
@@ -123,20 +127,22 @@ public class CivVQuickRef_Controller implements Initializable {
             initializeFiles();
             loadData(DATA_FOLDER + xmlFile);
         } catch (URISyntaxException ex) {
-            errorAlert.setContentText(ex.getMessage());
-            errorAlert.showAndWait();
+            showErrorAlert(ex);
         } catch (FileNotFoundException ex) {
-            errorAlert.setContentText(ex.getMessage());
-            errorAlert.showAndWait();
+            showErrorAlert(ex);
         } catch (IOException ex) {
-            errorAlert.setContentText(ex.getMessage());
-            errorAlert.showAndWait();
+            showErrorAlert(ex);
         } catch (Exception ex) {
-            errorAlert.setContentText(ex.getMessage());
-            errorAlert.showAndWait();
+            showErrorAlert(ex);
         }
     }
-    
+
+    private void showErrorAlert(Exception ex) {
+        errorAlert.setHeaderText(ex.getClass().getSimpleName());
+        errorAlert.setContentText(ex.getMessage());
+        errorAlert.showAndWait();
+    }
+
     private void initializeXmlFileChooser() {
         xmlFileChooser = new FileChooser();
         String curPath = Paths.get(DATA_FOLDER).toAbsolutePath().normalize().toString();
@@ -196,9 +202,9 @@ public class CivVQuickRef_Controller implements Initializable {
                 xmlWriter.newLine();
             }
         } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(CivVQuickRef_Controller.class.getName()).log(Level.SEVERE, null, ex);
+            showErrorAlert(ex);
         } catch (IOException ex) {
-            Logger.getLogger(CivVQuickRef_Controller.class.getName()).log(Level.SEVERE, null, ex);
+            showErrorAlert(ex);
         } finally {
             try {
                 if (xmlReader != null) {
@@ -208,7 +214,7 @@ public class CivVQuickRef_Controller implements Initializable {
                     xmlWriter.close();
                 }
             } catch (IOException ex) {
-                Logger.getLogger(CivVQuickRef_Controller.class.getName()).log(Level.SEVERE, null, ex);
+                showErrorAlert(ex);
             }
         }
     }
@@ -237,12 +243,14 @@ public class CivVQuickRef_Controller implements Initializable {
                 ImageIO.write(img, "png", new File(IMG_FOLDER + imgFile));
             }
         } catch (IOException ex) {
+            showErrorAlert(ex);
         } finally {
             try {
                 if (imgLookupReader != null) {
                     imgLookupReader.close();
                 }
             } catch (IOException ex) {
+                showErrorAlert(ex);
             }
         }
     }
@@ -383,38 +391,39 @@ public class CivVQuickRef_Controller implements Initializable {
         Parent root;
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().
-                    getResource("civvquickref/resources/view/createciv.fxml"));
-            root = loader.load();
-            //root = FXMLLoader.load(getClass().getClassLoader().getResource("civvquickref/createciv/view/createciv.fxml"));
 
-            Scene createCivScene = new Scene(root);
+            if (createCivStage == null) {
+                FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().
+                        getResource("civvquickref/resources/view/createciv.fxml"));
+                root = loader.load();
 
-            Stage createCivStage = new Stage();
-            createCivStage.setTitle("Create civilization");
-            createCivStage.setScene(createCivScene);
-            createCivStage.setOnHiding((WindowEvent event1) -> {
-                Platform.runLater(() -> {
-                    CreateCiv_Controller createController = loader.getController();
-                    if (createController.isCivilizationCreated()) {
-                        try {
-                            civilizationListSource.add(createController.getCivilization());
-                            FXCollections.sort(civilizationListSource,
-                                    new CivNameComparator());
-                            civDAO.saveCivs(civilizationListSource, mod);
-                        } catch (Exception ex) {
-                            Logger.getLogger(CivVQuickRef_Controller.class.getName()).log(Level.SEVERE, null, ex);
+                Scene createCivScene = new Scene(root);
+
+                createCivStage = new Stage();
+                createCivStage.setTitle("Create civilization");
+                createCivStage.setScene(createCivScene);
+                createCivStage.setOnHiding((WindowEvent event1) -> {
+                    Platform.runLater(() -> {
+                        CreateCiv_Controller createController = loader.getController();
+                        if (createController.isCivilizationCreated()) {
+                            try {
+                                civilizationListSource.add(createController.getCivilization());
+                                FXCollections.sort(civilizationListSource,
+                                        new CivNameComparator());
+                                civDAO.saveCivs(civilizationListSource, mod);
+                            } catch (Exception ex) {
+                                showErrorAlert(ex);
+                            }
                         }
-                    }
-                    //civilizationImage.setImage(new Image(createController.getImageURI().toString()));
-
-                    // TODO Copy chosen image from created civ into img folder.
+                    });
                 });
-            });
+            }
 
+            createCivStage.setIconified(false);
+            createCivStage.requestFocus();
             createCivStage.show();
         } catch (IOException ex) {
-            Logger.getLogger(CivVQuickRef_Controller.class.getName()).log(Level.SEVERE, null, ex);
+            showErrorAlert(ex);
         }
     }
 
@@ -424,59 +433,62 @@ public class CivVQuickRef_Controller implements Initializable {
         if (civilizationListSource.isEmpty()) {
             infoAlert.setContentText("The civilization list is empty.");
             infoAlert.showAndWait();
-        } 
-        else {
+        } else {
             Parent root;
 
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().
-                        getResource("civvquickref/resources/view/createciv.fxml"));
-                root = loader.load();
+                if (editCivStage == null) {
+                    FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().
+                            getResource("civvquickref/resources/view/createciv.fxml"));
+                    root = loader.load();
 
-                CreateCiv_Controller editController = loader.getController();
-                int index = civilizationList.getSelectionModel().getSelectedIndex();
-                editController.setCivilization(civilizationListSource.get(index));
-                editController.initializeCivFields();
+                    CreateCiv_Controller editController = loader.getController();
+                    int index = civilizationList.getSelectionModel().getSelectedIndex();
+                    editController.setCivilization(civilizationListSource.get(index));
+                    editController.initializeCivFields();
 
-                Scene editCivScene = new Scene(root);
-                Stage editCivStage = new Stage();
-                editCivStage.setTitle("Edit civilization");
-                editCivStage.setScene(editCivScene);
-                editCivStage.setOnHiding((WindowEvent event1) -> {
-                    Platform.runLater(() -> {
-                        if (!editController.isCivilizationCreated()) {
-                            try {
-                                FXCollections.sort(civilizationListSource,
-                                        new CivNameComparator());
-                                civDAO.saveCivs(civilizationListSource, mod);
-                            } catch (Exception ex) {
-                                Logger.getLogger(CivVQuickRef_Controller.class.getName()).log(Level.SEVERE, null, ex);
+                    Scene editCivScene = new Scene(root);
+
+                    editCivStage = new Stage();
+                    editCivStage.setTitle("Edit civilization");
+                    editCivStage.setScene(editCivScene);
+                    editCivStage.setOnHiding((WindowEvent event1) -> {
+                        Platform.runLater(() -> {
+                            if (!editController.isCivilizationCreated()) {
+                                try {
+                                    FXCollections.sort(civilizationListSource,
+                                            new CivNameComparator());
+                                    civDAO.saveCivs(civilizationListSource, mod);
+                                } catch (Exception ex) {
+                                    showErrorAlert(ex);
+                                }
                             }
-                        }
-                        //civilizationImage.setImage(new Image(createController.getImageURI().toString()));
+                            //civilizationImage.setImage(new Image(createController.getImageURI().toString()));
 
-                        // TODO Copy chosen image from created civ into img folder.
+                            // TODO Copy chosen image from created civ into img folder.
+                        });
                     });
-                });
+                }
 
+                editCivStage.setIconified(false);
+                editCivStage.requestFocus();
                 editCivStage.show();
             } catch (IOException ex) {
-                Logger.getLogger(CivVQuickRef_Controller.class.getName()).log(Level.SEVERE, null, ex);
+                showErrorAlert(ex);
             }
         }
     }
-    
+
     @FXML
     public void deleteCivMenuSelected(ActionEvent event) {
         if (civilizationListSource.isEmpty()) {
             infoAlert.setContentText("The civilization list is empty.");
             infoAlert.showAndWait();
-        } 
-        else {
+        } else {
             confirmAlert.setContentText("Are you sure you want to delete the "
                     + "selected civilization?");
             confirmAlert.showAndWait();
-            
+
             if (confirmAlert.getResult() == ButtonType.OK) {
                 try {
                     int selectedIndex = civilizationList.getSelectionModel().getSelectedIndex();
@@ -506,24 +518,24 @@ public class CivVQuickRef_Controller implements Initializable {
         }
 
     }
-    
+
     /**
-     * Open menu handler. It shows an open dialog to allow the user to choose a 
-     * XML file. Then, it tries to load its data, checking if the file has the 
+     * Open menu handler. It shows an open dialog to allow the user to choose a
+     * XML file. Then, it tries to load its data, checking if the file has the
      * correct CivilizationVGame XML structure.
-     * 
-     * @param event 
+     *
+     * @param event
      */
     @FXML
     public void openMenuSelected(ActionEvent event) {
         File file = xmlFileChooser.showOpenDialog(modName.getScene().getWindow());
-        
+
         /*
         Very important: we use the xmlPath local variable to temporarily save the 
         route of the XML file and then we pass it to the xmlFile global variable 
         after creating the DAO with the route and checking if that file has the 
         correct XML element structure.
-        */
+         */
         String xmlPath;
         if (file != null) {
             try {
@@ -537,57 +549,95 @@ public class CivVQuickRef_Controller implements Initializable {
                         + "proper CivilizationVGame structure.");
                 errorAlert.showAndWait();
             } catch (FileNotFoundException ex) {
-                Logger.getLogger(CivVQuickRef_Controller.class.getName()).log(Level.SEVERE, null, ex);
+                showErrorAlert(ex);
             } catch (URISyntaxException ex) {
-                Logger.getLogger(CivVQuickRef_Controller.class.getName()).log(Level.SEVERE, null, ex);
+                showErrorAlert(ex);
             } catch (Exception ex) {
-                Logger.getLogger(CivVQuickRef_Controller.class.getName()).log(Level.SEVERE, null, ex);
+                showErrorAlert(ex);
             }
         }
     }
-    
+
     @FXML
     public void newMenuSelected(ActionEvent event) {
         File file = xmlFileChooser.showSaveDialog(modName.getScene().getWindow());
-        
+
         if (file != null) {
             emptyCivs();
             xmlFile = file.getPath();
-            
-            civDAO = new CivVQuickRefDAO_JAXB(xmlFile);            
+
+            civDAO = new CivVQuickRefDAO_JAXB(xmlFile);
             fileName.setText(civDAO.getSource());
-            
+
             mod = "";
             TextInputDialog input = new TextInputDialog();
             input.setTitle("Mod name");
             input.setHeaderText("Insert new CivilizationVGame mod name");
             input.setContentText("Mod name:");
             Optional<String> result = input.showAndWait();
-            result.ifPresent(newModName -> { 
+            result.ifPresent(newModName -> {
                 mod = newModName;
-                
+
                 modName.setText(mod);
-            });                       
+            });
         }
     }
-    
+
+    @FXML
+    public void exitMenuSelected(ActionEvent event) {
+
+        confirmAlert.setHeaderText("Exit");
+        confirmAlert.setContentText("Are you sure you want to exit?");
+        confirmAlert.showAndWait();
+
+        if (confirmAlert.getResult() == ButtonType.OK)
+            Platform.exit();
+    }
+
+    @FXML
+    public void helpMenuSelected(ActionEvent event) {
+        Parent root;
+
+        try {
+            if (helpStage == null) {
+                FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().
+                        getResource("civvquickref/resources/view/civvquickref_help.fxml"));
+                root = loader.load();
+
+                Scene helpScene = new Scene(root);
+
+                helpStage = new Stage();
+                helpStage.setTitle("Help");
+                helpStage.setScene(helpScene);
+
+                helpStage.setResizable(false);
+            }
+
+            helpStage.setIconified(false);
+            helpStage.requestFocus();
+            helpStage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(CivVQuickRef_Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     private void emptyCivs() {
         civilizationListSource.clear();
-        
+
         modName.setText("Core - Mod name");
-        
+
         civilizationName.setText("Civilization name");
         leaderName.setText("Leader name");
         civilizationSkill.setText("Civilization skill");
-        
+
         File file = new File(IMG_FOLDER + CIV_NO_IMG);
         Image image = new Image(file.toURI().toString());
         civilizationImage.setImage(image);
-        
+
         unitName1.setText("Unit name");
         unitType1.setText("Unit type");
         unitReplaces1.setText("Unit replaces");
-        
+
         unitName2.setText("Unit name");
         unitType2.setText("Unit type");
         unitReplaces2.setText("Unit replaces");

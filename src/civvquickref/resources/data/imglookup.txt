@@ -9,6 +9,7 @@ byzantine.png
 carthaginian.png
 celtic.png
 chinese.png
+civnoimg.png
 danish.png
 dutch.png
 egyptian.png

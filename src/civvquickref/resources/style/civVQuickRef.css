@@ -9,7 +9,12 @@ and open the template in the editor.
 */
 
 .root {
-    -fx-background: #dbdbdb;
+    -fx-background: #1E3846;
+	-fx-base: #0F0F0F;
+}
+
+GridPane .label {
+	-fx-text-fill: #FFFFC8;
 }
 
 #civilizationImage {
