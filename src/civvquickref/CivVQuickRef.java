@@ -54,7 +54,7 @@ public class CivVQuickRef extends Application{
         });
         
         icon = new Image(getClass().getClassLoader().
-                getResourceAsStream("civvquickref/resources/icon.png"));
+                getResourceAsStream("civvquickref/resources/image/icon.png"));
         primaryStage.getIcons().add(icon);
         
         primaryStage.setTitle("CivVQuickRef");
