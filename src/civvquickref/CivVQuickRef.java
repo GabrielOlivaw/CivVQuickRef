@@ -6,11 +6,13 @@
 package civvquickref;
 
 import javafx.application.Application;
+import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -34,16 +36,26 @@ import javafx.stage.WindowEvent;
  */
 public class CivVQuickRef extends Application{
     
+    private static HostServices hostServices;
+    
+    private static Image icon;
+    
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getClassLoader().
                 getResource("civvquickref/resources/view/civvquickref.fxml"));
+        
+        hostServices = getHostServices();
         
         Scene scene = new Scene(root);
         
         primaryStage.setOnCloseRequest((WindowEvent event) -> {
             Platform.exit();
         });
+        
+        icon = new Image(getClass().getClassLoader().
+                getResourceAsStream("civvquickref/resources/icon.png"));
+        primaryStage.getIcons().add(icon);
         
         primaryStage.setTitle("CivVQuickRef");
         primaryStage.setScene(scene);
@@ -57,5 +69,25 @@ public class CivVQuickRef extends Application{
         
         launch(args);
         
+    }
+    
+    /**
+     * This method is needed to allow hyperlinks from children views (whose 
+     * controller classes don't extend Application class) to open in the system 
+     * default browser.
+     *  
+     * @param link
+     */
+    public static void openLinkBrowser(String link) {
+        hostServices.showDocument(link);
+    }
+    
+    /**
+     * Gets the main window icon to use it in children windows.
+     * 
+     * @return 
+     */
+    public static Image getIcon() {
+        return icon;
     }
 }

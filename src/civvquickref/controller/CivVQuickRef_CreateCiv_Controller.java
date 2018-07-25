@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package civvquickref.createciv.controller;
+package civvquickref.controller;
 
 import civvquickref.CivilizationList;
 import java.io.File;
@@ -37,7 +37,7 @@ import org.apache.commons.io.FilenameUtils;
  *
  * @author gabag
  */
-public class CreateCiv_Controller implements Initializable {
+public class CivVQuickRef_CreateCiv_Controller implements Initializable {
     
     private static final String IMG_FOLDER = "./data/img/";
     

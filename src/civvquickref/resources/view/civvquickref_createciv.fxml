@@ -6,7 +6,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox prefHeight="500.0" prefWidth="600.0" styleClass="root" stylesheets="@../style/civVQuickRef.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="civvquickref.createciv.controller.CreateCiv_Controller">
+<VBox prefHeight="500.0" prefWidth="600.0" styleClass="root" stylesheets="@../style/civVQuickRef.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="civvquickref.controller.CivVQuickRef_CreateCiv_Controller">
    <children>
       <GridPane vgap="5.0" VBox.vgrow="ALWAYS">
         <columnConstraints>

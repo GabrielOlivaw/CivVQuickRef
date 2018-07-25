@@ -49,6 +49,8 @@ public class CivVQuickRef_Help_Controller implements Initializable {
      */
     private void getReadme() {
         BufferedReader xmlReader = null;
+        
+        int pos = helpText.getCaretPosition();
 
         try {
             xmlReader = new BufferedReader(new InputStreamReader(getClass().
@@ -71,6 +73,8 @@ public class CivVQuickRef_Help_Controller implements Initializable {
                 showErrorAlert(ex);
             }
         }
+        
+        helpText.positionCaret(pos);
     }
     
 }

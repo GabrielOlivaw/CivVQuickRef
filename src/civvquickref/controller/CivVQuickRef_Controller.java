@@ -5,10 +5,10 @@
  */
 package civvquickref.controller;
 
+import civvquickref.CivVQuickRef;
 import civvquickref.dao.CivVQuickRefDAO;
 import civvquickref.dao.CivVQuickRefDAO_JAXB;
 import civvquickref.CivilizationList;
-import civvquickref.createciv.controller.CreateCiv_Controller;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -61,7 +61,10 @@ public class CivVQuickRef_Controller implements Initializable {
 
     private static final String DATA_FOLDER = "./data/";
     private static final String IMG_FOLDER = "./data/img/";
+    private static final String RESOURCES_DATA_FOLDER = "civvquickref/resources/data/";
+    private static final String RESOURCES_VIEW_FOLDER = "civvquickref/resources/view/";
     private static final String CIV_NO_IMG = "civnoimg.png";
+    
     private String xmlFile = "CivVQuickRef.xml";
 
     private CivVQuickRefDAO civDAO;
@@ -104,6 +107,7 @@ public class CivVQuickRef_Controller implements Initializable {
     private Stage createCivStage;
     private Stage editCivStage;
     private Stage helpStage;
+    private Stage aboutStage;
 
     private Alert errorAlert;
     private Alert infoAlert;
@@ -194,7 +198,7 @@ public class CivVQuickRef_Controller implements Initializable {
         BufferedWriter xmlWriter = null;
         try {
             xmlReader = new BufferedReader(new InputStreamReader(getClass().
-                    getClassLoader().getResourceAsStream("civvquickref/resources/data/" + xmlFile), "UTF-8"));
+                    getClassLoader().getResourceAsStream(RESOURCES_DATA_FOLDER + xmlFile), "UTF-8"));
             xmlWriter = new BufferedWriter(new FileWriter(DATA_FOLDER + xmlFile));
             String line;
             while ((line = xmlReader.readLine()) != null) {
@@ -233,13 +237,13 @@ public class CivVQuickRef_Controller implements Initializable {
         try {
             imgLookupReader = new BufferedReader(new InputStreamReader(
                     getClass().getClassLoader().getResourceAsStream(
-                            "civvquickref/resources/data/imglookup.txt")));
+                            RESOURCES_DATA_FOLDER + "imglookup.txt")));
 
             String imgFile;
             BufferedImage img;
             while ((imgFile = imgLookupReader.readLine()) != null) {
                 img = ImageIO.read(getClass().getClassLoader().getResource(
-                        "civvquickref/resources/data/img/" + imgFile));
+                        RESOURCES_DATA_FOLDER + "img/" + imgFile));
                 ImageIO.write(img, "png", new File(IMG_FOLDER + imgFile));
             }
         } catch (IOException ex) {
@@ -394,17 +398,18 @@ public class CivVQuickRef_Controller implements Initializable {
 
             if (createCivStage == null) {
                 FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().
-                        getResource("civvquickref/resources/view/createciv.fxml"));
+                        getResource(RESOURCES_VIEW_FOLDER + "civvquickref_createciv.fxml"));
                 root = loader.load();
 
                 Scene createCivScene = new Scene(root);
 
                 createCivStage = new Stage();
                 createCivStage.setTitle("Create civilization");
+                createCivStage.getIcons().add(CivVQuickRef.getIcon());
                 createCivStage.setScene(createCivScene);
                 createCivStage.setOnHiding((WindowEvent event1) -> {
                     Platform.runLater(() -> {
-                        CreateCiv_Controller createController = loader.getController();
+                        CivVQuickRef_CreateCiv_Controller createController = loader.getController();
                         if (createController.isCivilizationCreated()) {
                             try {
                                 civilizationListSource.add(createController.getCivilization());
@@ -439,10 +444,10 @@ public class CivVQuickRef_Controller implements Initializable {
             try {
                 if (editCivStage == null) {
                     FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().
-                            getResource("civvquickref/resources/view/createciv.fxml"));
+                            getResource(RESOURCES_VIEW_FOLDER + "civvquickref_createciv.fxml"));
                     root = loader.load();
 
-                    CreateCiv_Controller editController = loader.getController();
+                    CivVQuickRef_CreateCiv_Controller editController = loader.getController();
                     int index = civilizationList.getSelectionModel().getSelectedIndex();
                     editController.setCivilization(civilizationListSource.get(index));
                     editController.initializeCivFields();
@@ -451,6 +456,7 @@ public class CivVQuickRef_Controller implements Initializable {
 
                     editCivStage = new Stage();
                     editCivStage.setTitle("Edit civilization");
+                    editCivStage.getIcons().add(CivVQuickRef.getIcon());
                     editCivStage.setScene(editCivScene);
                     editCivStage.setOnHiding((WindowEvent event1) -> {
                         Platform.runLater(() -> {
@@ -463,9 +469,6 @@ public class CivVQuickRef_Controller implements Initializable {
                                     showErrorAlert(ex);
                                 }
                             }
-                            //civilizationImage.setImage(new Image(createController.getImageURI().toString()));
-
-                            // TODO Copy chosen image from created civ into img folder.
                         });
                     });
                 }
@@ -601,13 +604,15 @@ public class CivVQuickRef_Controller implements Initializable {
         try {
             if (helpStage == null) {
                 FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().
-                        getResource("civvquickref/resources/view/civvquickref_help.fxml"));
+                        getResource(RESOURCES_VIEW_FOLDER + "civvquickref_help.fxml"));
                 root = loader.load();
 
                 Scene helpScene = new Scene(root);
 
                 helpStage = new Stage();
                 helpStage.setTitle("Help");
+                helpStage.getIcons().add(CivVQuickRef.getIcon());
+                
                 helpStage.setScene(helpScene);
 
                 helpStage.setResizable(false);
@@ -616,6 +621,34 @@ public class CivVQuickRef_Controller implements Initializable {
             helpStage.setIconified(false);
             helpStage.requestFocus();
             helpStage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(CivVQuickRef_Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    @FXML
+    public void aboutMenuSelected(ActionEvent event) {
+        
+        Parent root;
+
+        try {
+            if (aboutStage == null) {
+                FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().
+                        getResource(RESOURCES_VIEW_FOLDER + "civvquickref_about.fxml"));
+                root = loader.load();
+
+                Scene aboutScene = new Scene(root);
+
+                aboutStage = new Stage();
+                aboutStage.setTitle("About");
+                aboutStage.getIcons().add(CivVQuickRef.getIcon());
+                aboutStage.setScene(aboutScene);
+                aboutStage.setResizable(false);
+            }
+
+            aboutStage.setIconified(false);
+            aboutStage.requestFocus();
+            aboutStage.show();
         } catch (IOException ex) {
             Logger.getLogger(CivVQuickRef_Controller.class.getName()).log(Level.SEVERE, null, ex);
         }

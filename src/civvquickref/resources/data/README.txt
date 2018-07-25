@@ -14,4 +14,4 @@ Civilization - Each playable faction of the Civilization V Game. It is formed by
 
 Unit - One of the two unique features of each civilization. It has the following information: unit name, unit type (unit, building or improvement) and the name of the common unit that is replaced by this particular civilization unique feature.
 
-The CivVQuickRef application automatically generates a XML file and a folder of images corresponding to the Civilization V base game. You can create a new XML file, create an existing one and modify the currently loaded Civilization V Game adding, modifying or deleting the existing civilizations.
+The CivVQuickRef application automatically generates a XML file and a folder of images corresponding to the Civilization V base game. You can create a new XML file, load an existing one and modify the currently loaded Civilization V Game adding, modifying or deleting the existing civilizations.
